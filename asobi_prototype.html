@@ -1,0 +1,769 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>asobi. v10 プロトタイプ</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3/dist/tabler-icons.min.css">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;500;700&family=M+PLUS+Rounded+1c:wght@700;800&display=swap');
+body{margin:0;background:#E8E1D0;display:flex;justify-content:center;padding:24px 0;min-height:100vh;font-family:"Zen Maru Gothic",sans-serif;}
+.ph{width:344px;background:#FAF6ED;border-radius:36px;border:1px solid #E0D6BF;overflow:hidden;position:relative;color:#2B2620;box-shadow:0 18px 50px rgba(80,60,20,.16);}
+.ph *{box-sizing:border-box;}
+.ph input,.ph textarea,.ph select{color:#2B2620;background:#fff;font-family:inherit;}
+.ph ::placeholder{color:#BCB09B;}
+.bar{display:flex;justify-content:space-between;align-items:center;padding:12px 20px 2px;font-size:11px;color:#B3A78E;font-weight:700;}
+.scr{padding:14px 16px 18px;min-height:560px;animation:screenIn .2s ease;}
+@keyframes screenIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.tt{font-size:21px;font-weight:700;letter-spacing:.2px;}
+.h3{font-size:12.5px;font-weight:700;color:#A79B84;margin:16px 2px 8px;}
+.mut{font-size:12.5px;color:#7A6F58;line-height:1.6;}
+.card{background:#fff;border:1px solid #F0E8D5;border-radius:20px;padding:14px;margin-bottom:10px;box-shadow:0 2px 8px rgba(90,70,30,.04);transition:transform .12s ease;}
+.card:active{transform:scale(.995);}
+.r{display:flex;align-items:center;gap:10px;}
+.sb{display:flex;align-items:center;justify-content:space-between;}
+.btn{display:flex;align-items:center;justify-content:center;gap:7px;width:100%;background:#FF7A45;color:#fff;border-radius:16px;padding:14px;font-size:15px;font-weight:700;cursor:pointer;user-select:none;box-shadow:0 4px 12px rgba(255,122,69,.28);transition:transform .12s ease;}
+.btn:active{transform:scale(.985);}
+.btn.g{background:#fff;color:#2B2620;border:1.5px solid #E8DFCA;box-shadow:none;}
+.btn.rd{background:#E25B4C;box-shadow:0 4px 12px rgba(226,91,76,.25);}
+.btn.gold{background:#F5B73D;color:#241A02;box-shadow:0 4px 12px rgba(245,183,61,.25);}
+.btn.dis{opacity:.45;pointer-events:none;}
+.pill{display:inline-flex;align-items:center;gap:4px;padding:8px 13px;border-radius:999px;font-size:12.5px;font-weight:500;cursor:pointer;background:#fff;color:#7A6F58;border:1.5px solid #EAE1CA;margin:0 6px 8px 0;}
+.pill.on{color:#fff;border-color:transparent;background:#FF7A45;}
+.em{width:44px;height:44px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:22px;flex:none;}
+.ava{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#fff;flex:none;border:2px solid #fff;margin-left:-8px;background:#EAE1CA;}
+.avs{display:flex;}.avs .ava:first-child{margin-left:0;}
+img.ava{object-fit:cover;}
+.badge{font-size:10.5px;padding:4px 10px;border-radius:999px;font-weight:700;}
+.soonb{background:#FF7A45;color:#fff;animation:pulse 1.6s infinite;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.55}}
+.inp{width:100%;border:1.5px solid #E8DFCA;border-radius:14px;padding:12px;font-size:15px;background:#fff;}
+.inp:focus{outline:none;border-color:#FF7A45;}
+.codeb{width:42px;height:52px;border:1.5px solid #E8DFCA;border-radius:13px;background:#fff;display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:700;}
+.tabbar{display:flex;align-items:flex-end;justify-content:space-around;border-top:1px solid #EFE6D0;background:#FFFDF7;padding:8px 6px 12px;}
+.tab{flex:1;text-align:center;font-size:10px;color:#BBAF96;cursor:pointer;font-weight:700;position:relative;}
+.tab.on{color:#FF7A45;}
+.tab i{font-size:22px;display:block;margin-bottom:2px;}
+.tab .nd{position:absolute;top:-2px;right:50%;margin-right:-15px;width:8px;height:8px;border-radius:50%;background:#FF7A45;}
+.bub{background:#fff;border:1px solid #F0E8D5;border-radius:16px 16px 16px 5px;padding:10px 13px;font-size:13.5px;margin:7px 0;max-width:80%;line-height:1.55;}
+.bub.me{background:#FF7A45;border:none;color:#fff;margin-left:auto;border-radius:16px 16px 5px 16px;}
+.sys{text-align:center;font-size:11.5px;color:#A79B84;margin:12px 0;line-height:1.6;}
+.row2{display:flex;gap:9px;}
+.lk{color:#E8683B;font-size:12.5px;cursor:pointer;font-weight:700;}
+.back{font-size:22px;cursor:pointer;line-height:1;color:#2B2620;}
+.setrow{display:flex;align-items:center;gap:12px;padding:14px 2px;border-bottom:1px solid #F0E8D5;cursor:pointer;font-size:14px;font-weight:500;}
+.setrow i:first-child{font-size:18px;color:#A79B84;width:20px;text-align:center;}
+.bd0{position:absolute;inset:0;background:rgba(50,40,20,.35);animation:bdIn .18s ease;}
+@keyframes bdIn{from{opacity:0}to{opacity:1}}
+.sheet{position:absolute;left:0;right:0;bottom:0;background:#fff;border-radius:22px 22px 0 0;padding:18px 16px;box-shadow:0 -8px 30px rgba(60,45,20,.15);max-height:78%;overflow-y:auto;animation:sheetUp .22s cubic-bezier(.2,.8,.3,1);}
+@keyframes sheetUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.sheetrow{padding:14px 4px;font-size:14.5px;cursor:pointer;border-bottom:1px solid #F3ECDA;font-weight:500;}
+.warn{background:#FFF3EC;border:1.5px solid #FFC9A8;border-radius:16px;padding:12px 14px;margin-bottom:10px;font-size:12.5px;color:#B4552B;line-height:1.7;}
+.toast{position:absolute;left:20px;right:20px;bottom:84px;background:#332C22;color:#FFF9EC;border-radius:14px;padding:12px 14px;font-size:13px;text-align:center;z-index:5;}
+.pop{animation:pp .45s ease;}@keyframes pp{0%{transform:scale(.4);opacity:0}65%{transform:scale(1.08)}100%{transform:scale(1)}}
+.logo{font-family:"M PLUS Rounded 1c",sans-serif;font-size:40px;font-weight:800;}
+.logo b{color:#FF7A45;}
+.tg{width:46px;height:27px;border-radius:999px;background:#EAE1CA;position:relative;cursor:pointer;flex:none;}
+.tg.on{background:#2FA97C;}
+.tg>i{position:absolute;top:2.5px;left:3px;width:22px;height:22px;border-radius:50%;background:#fff;transition:.15s;}
+.tg.on>i{left:21px;}
+.vb{display:inline-flex;align-items:center;gap:4px;font-size:11px;color:#2FA97C;background:rgba(47,169,124,.12);padding:4px 10px;border-radius:999px;font-weight:700;}
+.meter{height:6px;background:#F1EAD8;border-radius:99px;margin-top:8px;overflow:hidden;}
+.meter>div{height:6px;background:#FF7A45;border-radius:99px;}
+.vrow{display:flex;align-items:flex-start;gap:12px;text-align:left;padding:13px 14px;background:#fff;border:1px solid #F0E8D5;border-radius:16px;margin-bottom:10px;}
+.vrow i{font-size:20px;color:#FF7A45;margin-top:1px;}
+.lock{font-size:13px;color:#A79B84;}
+@media (prefers-reduced-motion:reduce){*{animation-duration:.001s!important;transition-duration:.001s!important;}}
+.dtile{display:inline-flex;flex-direction:column;align-items:center;justify-content:center;width:42px;padding:6px 0 7px;border-radius:14px;background:#fff;border:1.5px solid #EAE1CA;margin-right:6px;cursor:pointer;vertical-align:top;}
+.dtile .dw{font-size:9.5px;color:#A79B84;font-weight:700;}
+.dtile .dw.sat{color:#2FA3DC;}.dtile .dw.sun{color:#E25B4C;}
+.dtile .dn{font-size:15px;font-weight:700;margin-top:1px;color:#2B2620;}
+.dtile.on{background:#FF7A45;border-color:transparent;}
+.dtile.on .dw,.dtile.on .dn{color:#fff;}
+</style>
+</head>
+<body>
+<div class="ph" id="ph"></div>
+<datalist id="stlist">
+<option value="渋谷駅"><option value="新宿駅"><option value="池袋駅"><option value="高田馬場駅"><option value="下北沢駅"><option value="吉祥寺駅"><option value="中野駅"><option value="秋葉原駅"><option value="上野駅"><option value="恵比寿駅"><option value="品川駅"><option value="立川駅"><option value="町田駅"><option value="八王子駅"><option value="横浜駅"><option value="川崎駅"><option value="大宮駅"><option value="千葉駅"><option value="柏駅"><option value="梅田駅"><option value="難波駅"><option value="三宮駅"><option value="栄駅"><option value="天神駅"><option value="札幌駅"><option value="仙台駅">
+</datalist>
+<script>
+// ===== 定数 =====
+// デモ基準: 2026-07-02(木) 18:20
+var NOW='18:20';
+var CATS={
+ nomi:{n:'飲み',e:'🍻',c:'#E2574C',age:20},
+ gohan:{n:'ごはん',e:'🍜',c:'#F59E0B'},
+ cafe:{n:'カフェ',e:'☕',c:'#2FA97C'},
+ karaoke:{n:'カラオケ',e:'🎤',c:'#F0608C'},
+ game:{n:'ゲーム',e:'🎮',c:'#7C6CF6'},
+ board:{n:'ボドゲ',e:'🎲',c:'#9B7BD8'},
+ movie:{n:'映画',e:'🎬',c:'#5C7CFA'},
+ sports:{n:'スポーツ',e:'🏀',c:'#2FA3DC'},
+ sauna:{n:'サウナ・銭湯',e:'♨️',c:'#C86B3C'},
+ drive:{n:'ドライブ',e:'🚗',c:'#4AA89E'},
+ shop:{n:'買い物',e:'🛍️',c:'#D96BA8'},
+ mahjong:{n:'麻雀',e:'🀄',c:'#4CA85E'},
+ study:{n:'作業・勉強',e:'📚',c:'#8A97A8'},
+ other:{n:'その他',e:'✨',c:'#B0A38B'}
+};
+var DAYS7=[{k:'7/2',l:'きょう',w:'今日',n:2},{k:'7/3',l:'あす',w:'明日',n:3},{k:'7/4',l:'土 7/4',w:'土',n:4},{k:'7/5',l:'日 7/5',w:'日',n:5},{k:'7/6',l:'月 7/6',w:'月',n:6},{k:'7/7',l:'火 7/7',w:'火',n:7},{k:'7/8',l:'水 7/8',w:'水',n:8}];
+function dayLabel(k){var d=DAYS7.filter(function(x){return x.k===k})[0];return d?d.l:k;}
+// カレンダー型の日付タイル（曜日+日にちの2段で統一）
+function dtiles(cur,assign,list){return (list||DAYS7).map(function(d){return '<span class="dtile'+(cur===d.k?' on':'')+'" onclick="'+assign+'=\''+d.k+'\';render()"><span class="dw'+(d.w==='土'?' sat':(d.w==='日'?' sun':''))+'">'+d.w+'</span><span class="dn">'+d.n+'</span></span>';}).join('');}
+var RADII=[[10,'近く（10km）'],[30,'広め（30km）'],[50,'最大（50km）']];
+// 「好きなカテゴリ」はCATSと同一の語彙を使う（旧「好きな遊び」タグはカテゴリと7/12語が完全重複していたため統合）
+var PT='https://randomuser.me/api/portraits/';
+// メンバー: [0名前,1色,2性別,3'大学 年齢',4写真,5タグ,6主催成立回数,7uid,8消費元(自分のみ)]
+// uid: 本人識別は名前でなくuidで行う（なりすまし・二重参加防止）。自分='me'
+var plans=[
+ {id:1,cat:'nomi',title:'サクッと軽く飲み',area:'渋谷駅',dist:1.2,day:'7/2',time:'21:00',dur:'約2時間',cap:3,minAge:20,likes:4,p:[['ケン','#7C6CF6','m','明治大 21',PT+'men/32.jpg',['nomi','karaoke'],12,'u-ken'],['リク','#2FA97C','m','工科大 22',PT+'men/45.jpg',['nomi','gohan'],null,'u-riku']]},
+ {id:2,cat:'gohan',title:'締めのラーメン行きたい',area:'高田馬場駅',dist:3.8,day:'7/2',time:'22:00',dur:'約1時間',cap:3,sameG:true,likes:2,p:[['ミオ','#F0608C','f','早稲田大 20',PT+'women/44.jpg',['gohan','cafe'],5,'u-mio'],['ナナ','#F59E0B','f','日大 21',PT+'women/68.jpg',['gohan'],null,'u-nana']]},
+ {id:3,cat:'karaoke',title:'カラオケ2〜3時間',area:'新宿駅',dist:2.5,day:'7/2',time:'20:00',dur:'約2時間',cap:3,likes:1,p:[['ユイ','#E2574C','f','工科大 19',PT+'women/12.jpg',['karaoke'],1,'u-yui']],nb:true},
+ {id:4,cat:'sauna',title:'サウナ行って整いたい',area:'池袋駅',dist:4.9,day:'7/2',time:'19:30',dur:'約2時間',cap:3,likes:0,p:[['ソウ','#2FA3DC','m','立教大 20',PT+'men/71.jpg',['sauna','movie'],3,'u-sou']]},
+ {id:5,cat:'game',title:'ネカフェでスマブラ',area:'秋葉原駅',dist:13.4,day:'7/3',time:'19:00',dur:'約3時間',cap:4,likes:3,p:[['ハル','#F59E0B','m','電機大 21',PT+'men/22.jpg',['game','board'],7,'u-haru'],['アオイ','#2FA97C','f','工科大 20',PT+'women/33.jpg',['game'],null,'u-aoi']]},
+ {id:6,cat:'nomi',title:'土曜に飲める人',area:'新宿駅',dist:2.5,day:'7/4',time:'20:00',dur:'未定',cap:3,minAge:20,likes:1,p:[['タクミ','#8A97A8','m','中央大 22',PT+'men/56.jpg',['nomi'],2,'u-takumi'],['レン','#7C6CF6','m','中央大 23',PT+'men/64.jpg',['nomi','sports'],null,'u-ren']]},
+ {id:7,cat:'cafe',title:'【公式】はじめての3人カフェ会',area:'新宿エリア',dist:2.5,day:'7/2',time:'未定',dur:null,cap:3,official:true,likes:6,p:[]}
+];
+var S={screen:'welcome',tab:'home',day:'7/2',cat:'all',radius:10,bmk:[],q:'',sameOnly:false,myWant:{},wSt:'',pvCtx:'pre',showSearch:false,
+ name:'たろう',myc:'#FF7A45',gender:'m',birth:{y:2005,m:11,d:20},uni:'東京工科大',photo:null,photoN:75,tags:[],email:'taro@edu.teu.ac.jp',emailErr:null,
+ premium:false,used:1,limit:3,tickets:0,
+ code:['','','','','',''],pv:null,retTo:null,cancelId:null,rmDay:'7/3',rmTime:'20:00',draft:'',
+ mychat:null,repKind:'user',legalFrom:null,d:null,
+ cCat:'',cTitle:'',cArea:'',cMemo:'',cDay:'7/2',cTime:'20:00',cDur:'約2時間',cCap:3,cSameG:false,
+ sheet:null,toast:null,rtags:[],rcat:null,rtxt:null,rtarget:'',blocked:[],curHost:null,seeded:false,
+ set:{nMatch:true,nChat:true,nRemind:true,showUni:true,privMode:false}};
+var cur=null;
+// 入力サニタイズ（プロト水準の対策。本実装ではDOM API+textContentに移行する）
+function clean(v){return String(v).replace(/[<>"'&`]/g,'');}
+function calcAge(){var passed=(S.birth.m<7)||(S.birth.m===7&&S.birth.d<=2);return 2026-S.birth.y-(passed?0:1);}
+function dim(y,m){return new Date(y,m,0).getDate();}
+function minsUntil(t){if(!/^\d{1,2}:\d{2}$/.test(t))return -1;var a=t.split(':');var b=NOW.split(':');return (+a[0]*60+ +a[1])-(+b[0]*60+ +b[1]);}
+function fmtDur(m){var h=Math.floor(m/60),mm=m%60;return (h?h+'時間':'')+(mm?mm+'分':'');}
+// 逆需要: 日付×場所で「遊びたい」を登録（予定が立ったら通知される想定）
+var WANTS={'7/2':{'渋谷駅':4,'新宿駅':2},'7/3':{'秋葉原駅':3},'7/4':{'渋谷駅':5,'下北沢駅':2},'7/5':{'新宿駅':3}};
+function wantGo(){var st=clean(S.wSt||'').trim();if(!st){toast('場所を選んでください');return;}
+ S.myWant[S.day]=st;if(!WANTS[S.day])WANTS[S.day]={};WANTS[S.day][st]=(WANTS[S.day][st]||0)+1;
+ S.wSt='';S.sheet=null;toast('登録しました。この日・この場所で予定が立ったら通知します');render();}
+function wantOff(){var st=S.myWant[S.day];if(st&&WANTS[S.day]&&WANTS[S.day][st])WANTS[S.day][st]=Math.max(0,WANTS[S.day][st]-1);delete S.myWant[S.day];S.sheet=null;render();}
+function wantTotal(d){var m=WANTS[d]||{};return Object.keys(m).reduce(function(s,k){return s+m[k];},0);}
+function wantCard(){var m=WANTS[S.day]||{};var total=wantTotal(S.day);
+ var breakdown=Object.keys(m).filter(function(k){return m[k]>0;}).sort(function(a,b){return m[b]-m[a];})
+  .map(function(k){return '<span class="pill" style="cursor:default;margin:0 6px 6px 0">'+k.replace('駅','')+' '+m[k]+'人</span>';}).join('');
+ var mine=S.myWant[S.day];
+ return '<div class="card" style="text-align:center"><div style="font-size:22px">🔥</div>'
+ +'<div style="font-weight:700;margin:6px 0 2px;font-size:14px">この日、遊びたい人が合計'+total+'人登録しています</div>'
+ +(breakdown?'<div style="margin:8px 0 4px">'+breakdown+'</div>':'')
+ +'<div class="mut" style="font-size:11.5px;margin-bottom:12px">場所を選んで登録すると、その場所・日で予定が立ったとき通知します</div>'
+ +(mine?'<div style="font-weight:700;color:#FF7A45;font-size:13px">'+mine.replace('駅','')+'で登録済み ✓ <span class="lk" style="font-size:11.5px;font-weight:500;margin-left:6px" onclick="wantOff()">解除</span></div>'
+   :B('g','sheet(\'want\')','🔥 この日・この場所で遊びたい','width:auto;margin:0 auto;padding:10px 18px'))+'</div>';}
+function mc(p){return p.p.length;}
+function soon(p){return mc(p)==p.cap-1;}
+function isFull(p){return mc(p)>=p.cap;}
+function meIn(p){return p.p.filter(function(x){return x[7]==='me'})[0]||null;}
+function isJoined(p){return !!meIn(p);}
+function hasBlocked(p){return p.p.some(function(x){return S.blocked.indexOf(x[0])>=0});}
+function comp(p){var m=p.p.filter(function(x){return x[2]=='m'}).length,f=p.p.filter(function(x){return x[2]=='f'}).length;var s=[];if(m)s.push('男性'+m);if(f)s.push('女性'+f);return s.join('・');}
+function myLabel(){return (S.set.showUni?S.uni:'大学非公開')+' '+calcAge();}
+function ava1(x,s){var st='width:'+s+'px;height:'+s+'px;margin-left:0;border:none;';
+ if(x[4])return '<img class="ava" src="'+x[4]+'" style="'+st+'">';
+ return '<span class="ava" style="background:'+x[1]+';'+st+'font-size:'+Math.round(s*0.4)+'px">'+x[0].charAt(0)+'</span>';}
+function myAva(s){return ava1([S.name,S.myc,S.gender,'',S.photo],s);}
+function avs(arr){return '<span class="avs">'+arr.map(function(a){return a[4]?'<img class="ava" src="'+a[4]+'">':'<span class="ava" style="background:'+a[1]+'">'+a[0].charAt(0)+'</span>';}).join('')+'</span>';}
+function B(cls,oc,txt,st){return '<div class="btn'+(cls?' '+cls:'')+'" role="button" tabindex="0" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){event.preventDefault();this.click()}" onclick="'+oc+'"'+(st?' style="'+st+'"':'')+'>'+txt+'</div>';}
+function TG(k){return '<div class="tg '+(S.set[k]?'on':'')+'" onclick="S.set[\''+k+'\']=!S.set[\''+k+'\'];render()"><i></i></div>';}
+function emoji(p){var C=CATS[p.cat];return '<div class="em" style="background:'+C.c+'22">'+C.e+'</div>';}
+// バッジは確認した事実だけを表示する（運営・招待中・大学メール認証）
+function badgeFor(x){
+ if(x[3]==='運営')return '<span class="badge" style="background:rgba(245,183,61,.18);color:#B47A0B"><i class="ti ti-shield-check"></i> 運営</span>';
+ if(x[3]==='招待中')return '<span class="badge" style="background:#F1EAD8;color:#A79B84">招待中（未確認）</span>';
+ return '<span class="vb"><i class="ti ti-circle-check"></i> 大学メール認証済み</span>';}
+function vbadge(){return '<span class="vb"><i class="ti ti-circle-check"></i> 大学メール認証済み</span>';}
+function tagPills(arr){return arr.map(function(k){var c=CATS[k];return '<span class="pill" style="padding:5px 10px;font-size:11px;margin:0 4px 4px 0;cursor:default">'+(c?c.e+' '+c.n:k)+'</span>';}).join('');}
+function sameGBadge(p){return (p.sameG&&p.p.length)?' <span class="badge" style="background:rgba(47,163,220,.13);color:#2278A8;font-size:9.5px;padding:2px 7px">'+(p.p[0][2]=='m'?'男性':'女性')+'のみ</span>':'';}
+function offBadge(p){return p.official?' <span class="badge" style="background:rgba(245,183,61,.18);color:#B47A0B;font-size:9.5px;padding:2px 7px">公式</span>':'';}
+
+// ===== オンボーディング =====
+function welcome(){return '<div style="text-align:center;padding-top:36px"><div class="logo"><b>asobi</b>.</div>'
+ +'<div style="font-size:24px;font-weight:700;margin-top:16px;letter-spacing:.5px">ヒマを、遊びに変える。</div>'
+ +'<div class="mut" style="margin:8px 0 26px">遊びの予定に参加するだけ。3人そろったら出発。</div>'
+ +'<div style="text-align:left;padding:0 6px">'
+ +'<div class="vrow"><i class="ti ti-school"></i><div><div style="font-weight:700;font-size:13.5px">大学生限定</div><div class="mut" style="font-size:11.5px;margin-top:2px">大学メール認証。学生だけの遊び場</div></div></div>'
+ +'<div class="vrow"><i class="ti ti-calendar-bolt"></i><div><div style="font-weight:700;font-size:13.5px">人ではなく、予定に参加</div><div class="mut" style="font-size:11.5px;margin-top:2px">飲み・カラオケ・ごはん。気になる予定に乗るだけ</div></div></div>'
+ +'<div class="vrow"><i class="ti ti-users-group"></i><div><div style="font-weight:700;font-size:13.5px">グループ制（3〜5人）</div><div class="mut" style="font-size:11.5px;margin-top:2px">1対1なし。3人そろったらグループチャット開始</div></div></div></div>'
+ +'<div style="margin-top:24px;padding:0 6px">'+B('','go(\'ag_email\')','同意してはじめる')+'</div>'
+ +'<div class="mut" style="margin-top:12px;font-size:11px"><span class="lk" style="font-size:11px" onclick="goLegal(\'terms\')">利用規約</span> ・ <span class="lk" style="font-size:11px" onclick="goLegal(\'privacy\')">プライバシーポリシー</span>（タップで確認できます）</div>'
+ +'<div class="mut" style="margin-top:8px;font-size:11px">アカウントをお持ちの方は <span class="lk" style="font-size:11px" onclick="toast(\'デモ: ログインは未実装\')">ログイン</span></div></div>';}
+function ag_email(){return '<div class="r" style="margin-bottom:14px"><span class="back" onclick="go(\'welcome\')">‹</span><span class="mut" style="margin-left:auto">1 / 4</span></div>'
+ +'<div class="tt">大学メールで登録</div><div class="mut" style="margin:8px 0 22px;line-height:1.8">学生確認のため、大学発行のメールアドレスを使用します。<br>他のユーザーには公開されません。</div>'
+ +'<input class="inp" id="emailin" inputmode="email" value="'+S.email+'">'
+ +(S.emailErr?'<div class="mut" style="color:#B4552B;margin-top:8px">'+S.emailErr+'</div>':'')
+ +'<div style="margin-top:22px">'+B('','sendCode()','確認コードを送信')+'</div>'
+ +'<div class="mut" style="margin-top:12px;font-size:11px">ac.jp以外のドメインを使う大学の方は、確認のうえ対応しますのでヘルプからお問い合わせください</div>';}
+function sendCode(){var el=document.getElementById('emailin');var v=el?clean(el.value.trim()):'';
+ if(!/^[^@\s]+@[^@\s]+\.ac\.jp$/.test(v)){S.emailErr='大学発行のメールアドレス（ac.jpドメイン）を入力してください。';render();return;}
+ S.email=v;S.emailErr=null;go('ag_code');}
+function ag_code(){var boxes=S.code.map(function(c){return '<div class="codeb">'+(c||'')+'</div>';}).join('');
+ return '<div class="r" style="margin-bottom:18px"><span class="back" onclick="go(\'ag_email\')">‹</span><span class="mut" style="margin-left:auto">1 / 4</span></div>'
+ +'<div class="tt">確認コードを入力</div><div class="mut" style="margin:8px 0 26px">'+S.email+' に6桁のコードを送信しました</div>'
+ +'<div class="r" style="justify-content:space-between">'+boxes+'</div>'
+ +'<div class="sb" style="margin-top:12px"><span class="lk" onclick="toast(\'確認コードを再送しました\')">コードを再送する</span><span class="lk" onclick="fill(\'code\',\'cbtn\')">自動入力（デモ）</span></div>'
+ +'<div style="margin-top:24px"><div class="btn" id="cbtn" role="button" onclick="go(\'ag_profile\')" style="opacity:.4;pointer-events:none">確認する</div></div>';}
+function addPhoto(){S.photoN++;var u=PT+(S.gender==='f'?'women':'men')+'/'+S.photoN+'.jpg';if(S.d)S.d.photo=u;else S.photo=u;render();}
+function ag_profile(){
+ var mx=dim(S.birth.y,S.birth.m);if(S.birth.d>mx)S.birth.d=mx;
+ var age=calcAge();var adult=age>=18;
+ var ys='';for(var y=2008;y>=1980;y--)ys+='<option value="'+y+'"'+(S.birth.y==y?' selected':'')+'>'+y+'年</option>';
+ var ms='';for(var m=1;m<=12;m++)ms+='<option value="'+m+'"'+(S.birth.m==m?' selected':'')+'>'+m+'月</option>';
+ var ds='';for(var d=1;d<=mx;d++)ds+='<option value="'+d+'"'+(S.birth.d==d?' selected':'')+'>'+d+'日</option>';
+ return '<div class="r" style="margin-bottom:14px"><span class="back" onclick="go(\'ag_code\')">‹</span><span class="mut" style="margin-left:auto">2 / 4</span></div>'
+ +'<div class="tt">プロフィール</div><div class="mut" style="margin:6px 0 14px">グループのメンバーに表示される情報です</div>'
+ +'<div class="card" style="padding:11px 14px"><div class="sb"><span class="mut">大学</span><span style="font-weight:500">東京工科大学 <span class="mut" style="font-size:10.5px">（メールから自動判定）</span></span></div></div>'
+ +'<div class="mut" style="margin:12px 0 8px">あなたらしい写真を追加しましょう（必須）</div>'
+ +'<div class="r" style="margin-bottom:6px">'+(S.photo?ava1([S.name,S.myc,S.gender,'',S.photo],56):'<span class="ava" style="width:56px;height:56px;margin-left:0;border:2px dashed #D9CDB2;background:#F5EFDF;color:#BCB09B;font-size:22px"><i class="ti ti-camera"></i></span>')
+ +B('g','addPhoto()',(S.photo?'写真を変更（デモ）':'写真を追加（デモ）'),'width:auto;padding:9px 14px')+'</div>'
+ +'<div class="mut" style="margin-bottom:12px;font-size:11px">顔がわかる写真だと成立しやすくなります。不適切な写真は審査で非公開になります</div>'
+ +'<div class="mut" style="margin-bottom:8px">ニックネーム（10文字まで）</div><input class="inp" maxlength="10" value="'+S.name+'" oninput="S.name=clean(this.value)" style="margin-bottom:14px">'
+ +'<div class="mut" style="margin-bottom:8px">性別</div><div style="margin-bottom:12px"><span class="pill '+(S.gender=='m'?'on':'')+'" onclick="S.gender=\'m\';render()">男性</span><span class="pill '+(S.gender=='f'?'on':'')+'" onclick="S.gender=\'f\';render()">女性</span></div>'
+ +'<div class="mut" style="margin-bottom:8px">生年月日（他のユーザーには年齢のみ表示）</div><div class="row2" style="margin-bottom:6px"><select class="inp" onchange="S.birth.y=+this.value;render()">'+ys+'</select><select class="inp" onchange="S.birth.m=+this.value;render()">'+ms+'</select><select class="inp" onchange="S.birth.d=+this.value;render()">'+ds+'</select></div>'
+ +(adult?'':'<div class="warn"><i class="ti ti-id"></i> 本サービスは18歳以上の大学生のみご利用いただけます。</div>')
+ +'<div class="mut" style="margin-bottom:2px;font-size:11px">※性別・生年月日は登録後に変更できません</div>'
+ +'<div class="mut" style="margin-bottom:12px;font-size:11px">※「飲み」への参加は20歳以上のみ。虚偽申告は利用停止の対象です</div>'
+ +B('','profNext()','次へ');}
+function profNext(){S.name=clean(S.name).trim();
+ if(calcAge()<18){toast('18歳以上の大学生のみ登録できます');render();return;}
+ if(!S.photo){toast('プロフィール写真を追加してください');return;}
+ if(!S.name){toast('ニックネームを入力してください');render();return;}
+ go('ag_tags');}
+function tgMyTag(t){var arr=S.d?S.d.tags:S.tags;var i=arr.indexOf(t);if(i>=0)arr.splice(i,1);else if(arr.length<5)arr.push(t);render();}
+function ag_tags(){
+ return '<div class="r" style="margin-bottom:14px"><span class="back" onclick="go(\'ag_profile\')">‹</span><span class="mut" style="margin-left:auto">3 / 4</span></div>'
+ +'<div class="tt">好きなカテゴリ</div><div class="mut" style="margin:8px 0 16px">1〜5個選んでください。同じ趣味の予定が見つけやすくなります</div>'
+ +'<div style="margin-bottom:14px">'+Object.keys(CATS).filter(function(k){return k!=='other'}).map(function(k){var c=CATS[k];return '<span class="pill '+(S.tags.indexOf(k)>=0?'on':'')+'" onclick="tgMyTag(\''+k+'\')">'+c.e+' '+c.n+'</span>';}).join('')+'</div>'
+ +'<div class="mut" style="margin-bottom:14px;font-size:11px">選択中: '+(S.tags.length?S.tags.map(function(k){return CATS[k]?CATS[k].n:k}).join('・'):'なし')+'（最大5つ）</div>'
+ +B('','if(S.tags.length){go(\'ag_perms\')}else{toast(\'1つ以上選んでください\')}','次へ');}
+function ag_perms(){return '<div class="r" style="margin-bottom:14px"><span class="back" onclick="go(\'ag_tags\')">‹</span><span class="mut" style="margin-left:auto">4 / 4</span></div>'
+ +'<div class="tt">通知と位置情報</div><div class="mut" style="margin:8px 0 18px">快適に使うための設定です。あとから変更できます</div>'
+ +'<div class="card"><div class="r"><div class="em" style="background:rgba(255,122,69,.15)">🔔</div><div><div style="font-weight:700;font-size:14px">プッシュ通知</div><div class="mut" style="font-size:11.5px;margin-top:2px">成立・チャット・集合リマインドを受け取ります</div></div></div></div>'
+ +'<div class="card"><div class="r"><div class="em" style="background:rgba(47,163,220,.15)">📍</div><div><div style="font-weight:700;font-size:14px">位置情報</div><div class="mut" style="font-size:11.5px;margin-top:2px">近くの予定を表示するために使用します</div></div></div></div>'
+ +'<div style="margin-top:20px">'+B('','finishAuth()','許可して始める')+'</div>'
+ +'<div class="lk" style="text-align:center;margin-top:12px" onclick="finishAuth()">あとで設定する</div>';}
+function goLegal(s){S.legalFrom=S.screen;go(s);}
+function legalBack(){var f=S.legalFrom;S.legalFrom=null;
+ if(f&&TABS.indexOf(f)>=0){goTab(f);}else if(f&&screens[f]&&f!=='terms'&&f!=='privacy'&&f!=='guidelines'){go(f);}else{S.seeded?goTab('mypage'):go('welcome');}}
+function terms(){
+ return '<div class="r" style="margin-bottom:10px"><span class="back" onclick="legalBack()">‹</span><span class="tt" style="margin-left:8px;font-size:18px">利用規約（要点）</span></div>'
+ +'<div class="card"><div class="mut" style="line-height:2">・本サービスは18歳以上の大学生専用です<br>・営利・宗教・マルチ等の勧誘、違法行為への利用は禁止します<br>・年齢や身分の虚偽申告は利用停止の対象です<br>・「飲み」の予定への参加は20歳以上のみです。20歳未満の飲酒は法律で禁止されています<br>・大学メールの利用にあたっては、所属大学の利用規程に従ってください<br>・通報には運営が対応し、違反者には利用制限を行います<br>・ユーザー間のトラブルには法令の範囲で対応します</div></div>'
+ +'<div class="lk" style="margin:4px 2px" onclick="go(\'privacy\')">プライバシーポリシーを見る →</div>'
+ +'<div class="lk" style="margin:4px 2px" onclick="go(\'guidelines\')">コミュニティガイドラインを見る →</div>'
+ +'<div class="mut" style="margin:8px 2px">※全文（運営者情報・保存期間・削除請求・問い合わせ先を含む）は弁護士確認後、正式リリース時に公開します</div>'
+ +B('g','legalBack()','閉じる','margin-top:12px');}
+function privacy(){
+ return '<div class="r" style="margin-bottom:10px"><span class="back" onclick="legalBack()">‹</span><span class="tt" style="margin-left:8px;font-size:18px">プライバシーポリシー（要点）</span></div>'
+ +'<div class="card"><div class="mut" style="line-height:2">・取得情報: 大学メール、ニックネーム、写真、性別、生年月日、好きな遊びタグ、位置情報（エリア単位のみ）<br>・メールアドレス・生年月日・正確な位置は他のユーザーに公開されません<br>・他のユーザーに表示される情報: ニックネーム、写真、年齢、性別、大学名（設定で非表示可）、好きな遊びタグ、参加実績（参加回数・主催成立回数）<br>・評価・通報・チャットの記録は安全対応のため一定期間保全します<br>・法令に基づく場合を除き、第三者への提供は行いません</div></div>'
+ +'<div class="mut" style="margin:8px 2px">※全文は弁護士確認後、正式リリース時に公開します</div>'
+ +B('g','legalBack()','閉じる','margin-top:12px');}
+function finishAuth(){
+ if(!S.seeded){plans.push({id:99,cat:'cafe',title:'新作スイーツ開拓',area:'新宿駅',dist:2.5,day:'7/3',time:'20:00',dur:'約1時間',cap:3,likes:2,p:[[S.name,S.myc,S.gender,myLabel(),S.photo,S.tags.slice(),null,'me','host']],host:'me'});S.seeded=true;}
+ go('promo');}
+function promo(){return '<div style="text-align:center;padding-top:36px" class="pop">'
+ +'<div style="font-size:11px;font-weight:700;color:#B47A0B;letter-spacing:3px">CAMPAIGN</div>'
+ +'<div style="font-size:72px;margin:16px 0 8px">🎟️</div>'
+ +'<div class="tt" style="font-size:24px">ホスト特典</div>'
+ +'<div style="margin:14px 20px;line-height:2;font-size:14px">予定が<b style="color:#FF7A45">成立</b>すると<br><b style="color:#FF7A45">参加チケット1枚</b>プレゼント！</div>'
+ +'<div class="card" style="margin:0 20px 8px;border:1.5px solid #F5B73D;background:#FFFBF2;text-align:left"><div class="mut" style="font-size:11.5px;line-height:1.8">・チケットは無料参加枠を使い切ったあと、1回分として使えます<br>・成立した予定1件につき1枚（デモ）</div></div>'
+ +'<div style="margin-top:20px;padding:0 20px">'+B('gold','goTab(\'home\')','はじめる')+'</div></div>';}
+
+// ===== さがす =====
+function baseFilter(){return plans.filter(function(p){
+ if(p.host==='me')return false;
+ if(p.day!==S.day)return false;
+ if(isFull(p)&&!isJoined(p))return false;
+ if(hasBlocked(p))return false;
+ if(S.cat!=='all'&&p.cat!==S.cat)return false;
+ if(S.sameOnly&&!p.p.every(function(x){return x[2]===S.gender}))return false;
+ if(S.q&&p.title.indexOf(S.q)<0&&p.area.indexOf(S.q)<0)return false;
+ return true;});}
+function home(){
+ var base=baseFilter();
+ var inR=base.filter(function(p){return p.dist<=S.radius;});
+ var usedR=S.radius,expanded=false;
+ if(!inR.length&&base.length){
+  for(var i=0;i<RADII.length;i++){var r=RADII[i][0];if(r>S.radius){var w=base.filter(function(p){return p.dist<=r;});if(w.length){inR=w;usedR=r;expanded=true;break;}}}
+ }
+ function favMatch(p){return S.tags.indexOf(p.cat)>=0;}
+ var sorted=inR.slice().sort(function(a,b){return (soon(b)-soon(a))||(favMatch(b)-favMatch(a))||(a.dist-b.dist);});
+ var list=sorted.length?sorted.map(function(p){var C=CATS[p.cat];
+  return '<div class="card" onclick="openP('+p.id+')" style="cursor:pointer'+(soon(p)?';border-color:#FFC9A8':'')+'">'
+  +'<div class="r">'+emoji(p)
+  +'<div style="flex:1;min-width:0"><div style="font-weight:700;font-size:14.5px">'+p.title+(p.nb?' <span class="badge" style="background:rgba(47,169,124,.13);color:#2FA97C">初参加</span>':'')+offBadge(p)+sameGBadge(p)+'</div>'
+  +'<div class="mut" style="margin-top:2px;font-size:12px"><b style="color:'+C.c+'">'+C.n+'</b>'+(favMatch(p)?' <span title="好きなカテゴリ">💗</span>':'')+(p.minAge==20?' <span style="font-size:10px;color:#B47A0B">20歳以上</span>':'')+(p.official?' ・ 日時・場所はチャットで相談 ・ '+p.area:' ・ '+p.time+'〜 ・ '+p.area+'（'+p.dist+'km）')+(p.day===DAYS7[0].k&&minsUntil(p.time)>0&&minsUntil(p.time)<=90?' ・ <b style="color:#FF7A45">まもなく</b>':'')+'</div></div></div>'
+  +'<div class="sb" style="margin-top:11px"><span class="r" style="gap:6px">'+avs(p.p)+'<span class="mut" style="font-size:11px">👑'+(p.official?'asobi公式':p.p[0][0])+(p.p.length?' ・ '+p.p.map(function(x){return x[3].split(' ')[0]}).join('・'):' ・ まだ参加者なし')+'</span></span>'
+  +(isJoined(p)?'<span class="badge" style="background:rgba(47,169,124,.13);color:#2FA97C">参加中</span>':(soon(p)?'<span class="badge soonb">あと1人</span>':'<span class="mut" style="font-weight:700">'+mc(p)+'/'+p.cap+'</span>'))+'</div></div>';
+ }).join(''):'<div class="card" style="text-align:center;padding:30px 16px"><div style="font-size:30px">🌙</div><div style="font-weight:700;margin:10px 0 4px">この'+(S.q?'条件':'日')+'の予定はまだありません</div><div class="mut" style="margin-bottom:14px">予定を立てると、近くの人に表示されます</div>'+B('g','openCreate()','＋ 予定を立てる','width:auto;margin:0 auto;padding:10px 20px')+'</div>'
+  +(S.q?'':wantCard());
+ var exNote=expanded?'<div class="mut" style="margin:0 2px 8px;font-size:11px"><i class="ti ti-map-pin"></i> 近くに予定が少ないため、'+(usedR===999?'全国':usedR+'km')+'まで広げて表示しています</div>':'';
+ var chips='<span class="pill '+(S.cat=='all'?'on':'')+'" onclick="S.cat=\'all\';render()">すべて</span>'
+  +Object.keys(CATS).map(function(k){var C=CATS[k];var on=S.cat==k;
+   return '<span class="pill'+(on?' on':'')+'" style="'+(on?'background:'+C.c+';color:#fff':'')+'" onclick="S.cat=\''+k+'\';render()">'+C.e+' '+C.n+'</span>';}).join('');
+ var dchips=dtiles(S.day,'S.day');
+ var rl=RADII.filter(function(r){return r[0]===S.radius})[0];
+ return '<div class="sb"><div class="tt">さがす</div><span class="r" style="gap:12px"><i class="ti ti-search" style="font-size:18px;color:#A79B84;cursor:pointer" onclick="S.showSearch=!S.showSearch;if(!S.showSearch){S.q=\'\';}render()"></i><span class="mut" style="cursor:pointer" onclick="sheet(\'radius\')"><i class="ti ti-current-location"></i> '+rl[1]+(S.sameOnly?' ・同性のみ':'')+' <i class="ti ti-chevron-down" style="font-size:11px"></i></span></span></div>'
+ +(S.showSearch?'<div class="r" style="margin-top:10px;gap:8px"><input class="inp" id="qin" style="padding:9px 12px;font-size:13px" placeholder="タイトル・駅名で検索してEnter" value="'+S.q+'" onkeydown="if(event.key===\'Enter\'){S.q=clean(this.value.trim());render()}">'+(S.q?'<span class="lk" style="flex:none" onclick="S.q=\'\';render()">解除</span>':'')+'</div>':'')
+ +'<div style="margin:12px 0 2px;white-space:nowrap;overflow-x:auto;scrollbar-width:none">'+dchips+'</div>'
+ +'<div style="margin:0 0 6px;white-space:nowrap;overflow-x:auto;scrollbar-width:none">'+chips+'</div>'+exNote+list;}
+
+// ===== 詳細・参加 =====
+function detail(){var p=cur;var C=CATS[p.cat];var age=calcAge();
+ var joinedP=isJoined(p),full=isFull(p),liked=S.bmk.indexOf(p.id)>=0,blk=hasBlocked(p);
+ var cta;
+ if(joinedP){cta=(mc(p)>=3?B('','openChatFor('+p.id+')','グループチャットへ'):B('g','leaveJoin()','参加を取り消す'));}
+ else if(blk){cta='<div class="btn dis">参加できません（ブロック中の相手がいます）</div>';}
+ else if(full){cta='<div class="btn dis">満員です</div>';}
+ else{cta=B('','joinPress()','この予定に参加する');}
+ var quota='';
+ if(!joinedP&&!full&&!blk){
+  if(p.official)quota='<div class="mut" style="text-align:center;margin-top:10px;font-size:11px">公式企画への参加は無料参加枠を消費しません</div>';
+  else if(!S.premium)quota='<div class="mut" style="text-align:center;margin-top:10px;font-size:11px">今月の無料参加 残り'+Math.max(0,S.limit-S.used)+'回'+(S.tickets?' ＋ チケット'+S.tickets+'枚':'')+' ・ 不成立なら回数は戻ります</div>';
+ }
+ return '<div class="sb" style="margin-bottom:4px"><span class="back" onclick="goTab(\'home\')">‹</span><span class="r" style="gap:14px"><i class="ti ti-heart'+(liked?'-filled':'')+'" style="font-size:21px;color:'+(liked?'#FF7A45':'#A79B84')+';cursor:pointer" onclick="tgLike('+p.id+')"></i>'+(p.official?'':'<span style="font-size:20px;color:#A79B84;cursor:pointer;padding:2px 6px" onclick="repPlan()">⋮</span>')+'</span></div>'
+ +'<div class="r" style="margin:4px 0 14px"><div class="em" style="width:52px;height:52px;font-size:26px;background:'+C.c+'22">'+C.e+'</div><div><div class="tt" style="font-size:18px">'+p.title+'</div><div class="mut"><b style="color:'+C.c+'">'+C.n+'</b>'+(p.nb?' ・ 初参加ホスト':'')+(joinedP?' ・ <b style="color:#2FA97C">参加中</b>':'')+offBadge(p)+sameGBadge(p)+'</div></div></div>'
+ +(p.official?'<div class="card" style="border-color:#F5B73D;background:#FFFBF2"><div class="mut" style="font-size:11.5px">主催: asobi公式（運営）。はじめての方でも参加しやすい公式企画です。<br>日時と場所は、3人そろったあとチャットで相談して決めます。運営はチャットに参加しません。</div></div>':'')
+ +'<div class="card"><div class="sb"><span class="mut">日時</span><span style="font-weight:500">'+(p.official?dayLabel(p.day)+' ・ チャットで相談':dayLabel(p.day)+' '+p.time+'〜（'+(p.dur||'未定')+'）')+'</span></div>'
+ +(p.day===DAYS7[0].k&&minsUntil(p.time)>0?'<div class="mut" style="text-align:right;font-size:11px;margin-top:2px">開始まで約'+fmtDur(minsUntil(p.time))+'</div>':'')
+ +'<div class="sb" style="margin-top:10px"><span class="mut">場所</span><span style="font-weight:500">'+(p.official?p.area+'（詳細はチャットで相談）':p.area+(p.memo?' / '+p.memo:''))+'</span></div><div class="sb" style="margin-top:10px"><span class="mut">メンバー構成</span><span style="font-weight:500">'+(mc(p)?comp(p)+'（'+mc(p)+'/'+p.cap+'）':'募集中（0/'+p.cap+'）')+'</span></div>'
+ +(function(){var others=p.p.filter(function(x){return x[7]!=='me'&&x[5]&&x[5].length;});
+  var common=S.tags.filter(function(t){return others.some(function(x){return x[5].indexOf(t)>=0;});});
+  return common.length?'<div class="sb" style="margin-top:10px"><span class="mut">共通の趣味</span><span style="font-weight:500;color:#FF7A45">'+common.map(function(k){return CATS[k]?CATS[k].n:k;}).join('・')+'</span></div>':'';})()+'</div>'
+ +'<div class="h3">メンバー</div><div class="card">'+(p.p.length?p.p.map(function(x,i){return '<div class="r" style="padding:6px 0;cursor:pointer'+(i?';border-top:1px solid #F3ECDA':'')+'" onclick="viewMember('+p.id+','+i+')">'+ava1(x,34)+'<span style="font-weight:500">'+x[0]+'</span><span class="mut" style="font-size:11.5px">'+x[3]+'</span>'+(i==0&&!p.official?'<span class="badge" style="background:rgba(245,183,61,.15);color:#B47A0B">👑 ホスト</span>':'')+'<i class="ti ti-chevron-right" style="margin-left:auto;color:#C9BDA4"></i></div>';}).join(''):'<div class="mut" style="padding:4px 0">まだ参加者はいません。最初の1人になりましょう</div>')+'</div>'
+ +(p.minAge==20&&!joinedP?'<div class="warn"><i class="ti ti-id"></i> この予定は20歳以上限定です。あなたの登録年齢: '+age+'歳'+(age<20?'（参加できません）':'')+'</div>':'')
+ +cta
+ +quota
+ +(!joinedP&&!full&&!blk?'<div class="mut" style="text-align:center;margin-top:6px;font-size:11px">3人そろうとグループチャットが開きます</div>':'');}
+function tgLike(id){var p=plans.filter(function(x){return x.id==id})[0];if(!p)return;
+ var i=S.bmk.indexOf(id);
+ if(i>=0){S.bmk.splice(i,1);p.likes=Math.max(0,(p.likes||0)-1);}else{S.bmk.push(id);p.likes=(p.likes||0)+1;}render();}
+function joinPress(){
+ if(hasBlocked(cur)){toast('ブロック中の相手が含まれる予定には参加できません');return;}
+ if(cur.minAge==20&&calcAge()<20){go('agedeny');return;}
+ if(cur.sameG&&cur.p.length&&cur.p[0][2]!==S.gender){go('samedeny');return;}
+ if(isJoined(cur)){toast('すでに参加しています');return;}
+ if(cur.cap-mc(cur)>=2){sheet('joinopt');return;}
+ tryJoin();}
+// 参加時に消費元を確定し、取消時は同じ財布に返す（会計整合）
+function debit(){
+ if(cur&&cur.official)return 'official';
+ if(S.premium)return 'premium';
+ if(S.used<S.limit){S.used++;return 'free';}
+ if(S.tickets>0){S.tickets--;return 'ticket';}
+ return null;}
+function tryJoin(){S.sheet=null;
+ if(isJoined(cur)){toast('すでに参加しています');return;}
+ var d=debit();if(d===null){go('quota');return;}
+ doJoin(d);}
+function joinWithFriend(){S.sheet=null;
+ if(isJoined(cur)){toast('すでに参加しています');return;}
+ var d=debit();if(d===null){go('quota');return;}
+ cur.p=cur.p.concat([[S.name,S.myc,S.gender,myLabel(),S.photo,S.tags.slice(),null,'me',d],['友達','#B0A38B',S.gender,'招待中',null,[],null,'friend-'+Date.now()]]);
+ afterJoin();}
+function doJoin(d){cur.p=cur.p.concat([[S.name,S.myc,S.gender,myLabel(),S.photo,S.tags.slice(),null,'me',d]]);afterJoin();}
+function afterJoin(){
+ if(mc(cur)>=3){S.mychat=cur;if(!cur.msgs)cur.msgs=[['sys','グループが成立しました。チャットで集合を決めましょう']];go('matched');}
+ else{go('joined');}}
+function refundFor(d){if(d==='free')S.used=Math.max(0,S.used-1);else if(d==='ticket')S.tickets++;}
+function leaveJoin(){var me=meIn(cur);if(!me){toast('この予定には参加していません');goTab('home');return;}
+ refundFor(me[8]);
+ cur.p=cur.p.filter(function(x){return x[7]!=='me'&&String(x[7]).indexOf('friend-')!==0});
+ if(S.mychat&&S.mychat.id===cur.id)S.mychat=null;
+ toast('参加を取り消しました'+(me[8]==='free'?'（無料枠が戻りました）':me[8]==='ticket'?'（チケットが戻りました）':''));goTab('home');}
+function joined(){return '<div style="text-align:center;padding-top:54px"><div style="font-size:46px">🤝</div><div class="tt" style="margin-top:12px">参加しました</div>'
+ +'<div class="r" style="justify-content:center;margin:18px 0">'+avs(cur.p)+'<span class="ava" style="background:#EAE1CA;color:#A79B84;font-size:14px;border:none">?</span></div>'
+ +'<div class="mut" style="line-height:1.8">あと'+Math.max(0,3-mc(cur))+'人で成立し、チャットが開きます。<br>そろったら通知します。成立しなかった場合、消費した分は自動で戻ります。</div>'
+ +'<div style="margin-top:30px">'+B('','goTab(\'home\')','ほかの予定も見る')+B('g','leaveJoin()','参加を取り消す','margin-top:10px')+'</div></div>';}
+function matched(){var extra=mc(cur)<cur.cap?'<div class="mut" style="margin-top:8px">この予定はあと'+(cur.cap-mc(cur))+'人参加できます</div>':'';
+ return '<div style="text-align:center;padding-top:50px" class="pop"><div style="font-size:54px">🎉</div><div class="tt" style="color:#2FA97C;margin-top:12px">3人そろいました</div>'
+ +'<div class="r" style="justify-content:center;margin:22px 0">'+avs(cur.p.slice(0,5))+'</div>'
+ +'<div class="mut">グループチャットが開きました。集合を決めましょう</div>'+extra
+ +'<div style="margin-top:34px;padding:0 6px">'+B('','openChatFor('+cur.id+')','チャットを開く')+'</div></div>';}
+function agedeny(){return '<div style="text-align:center;padding-top:60px"><div style="font-size:44px">🚫</div><div class="tt" style="margin-top:12px">参加できません</div>'
+ +'<div class="mut" style="margin-top:12px;line-height:1.9">「飲み」の予定は20歳以上のみ参加できます。<br>20歳未満の飲酒は法律で禁止されています。</div>'
+ +'<div style="margin-top:30px">'+B('g','go(\'detail\')','戻る')+'</div></div>';}
+function samedeny(){var g=cur&&cur.p.length&&cur.p[0][2]=='m'?'男性':'女性';
+ return '<div style="text-align:center;padding-top:60px"><div style="font-size:44px">🔒</div><div class="tt" style="margin-top:12px">'+g+'限定の予定です</div>'
+ +'<div class="mut" style="margin-top:12px;line-height:1.9">ホストがこの予定を'+g+'のみに設定しています。</div>'
+ +'<div style="margin-top:30px">'+B('g','goTab(\'home\')','ほかの予定を見る')+'</div></div>';}
+function quota(){return '<div style="text-align:center;padding-top:40px"><div style="font-size:44px">🎟️</div><div class="tt" style="margin-top:12px">今月の無料参加を使い切りました</div>'
+ +'<div class="mut" style="margin-top:10px;line-height:1.8">無料プランでは月'+S.limit+'回まで参加できます。<br>続けるには次のいずれかを選んでください。</div>'
+ +'<div style="margin-top:24px;text-align:left">'
+ +'<div class="card" style="border-color:#F5B73D"><div class="sb" style="margin-bottom:8px"><span style="font-weight:700"><i class="ti ti-crown" style="color:#F5B73D"></i> プレミアム</span><span class="badge" style="background:rgba(245,183,61,.15);color:#B47A0B">¥480 / 月</span></div><div class="mut" style="line-height:1.9">参加し放題 ・ 優先表示 ・ プライベートモード</div>'+B('gold','go(\'premium\')','プレミアムにする','margin-top:10px')+'</div>'
+ +'<div class="card"><div class="sb" style="margin-bottom:8px"><span style="font-weight:700">参加チケット 1回分</span><span class="badge" style="background:#F1EAD8;color:#2B2620">¥200</span></div>'+B('g','buyTicket()','チケットで参加する','margin-top:4px')+'</div>'
+ +B('g','go(\'detail\')','今回はやめておく','margin-top:4px')+'</div>';}
+function buyTicket(){S.tickets++;toast('チケットを購入しました（デモ）');tryJoin();}
+
+// ===== チャット（状態は予定オブジェクトに保持） =====
+function openChatFor(id){var p=plans.filter(function(x){return x.id==id})[0];
+ if(!p||!isJoined(p)||mc(p)<3){toast('参加中の成立したグループのみ開けます');goTab('chats');return;}
+ S.mychat=p;if(!p.msgs)p.msgs=[['sys','グループが成立しました。チャットで集合を決めましょう']];
+ S.sheet=null;S.screen='chat';render();}
+function openChat(){if(S.mychat){openChatFor(S.mychat.id);}else{toast('参加中のグループがありません');goTab('chats');}}
+// チャット: メッセージを主役に、予定情報と操作は上部ピンバー1枚に集約（マルチエージェント設計 v10.1）
+function chat(){var p=S.mychat;if(!p)return chats();
+ var body=(p.msgs||[]).map(function(m){if(m[0]==='sys')return '<div class="sys">'+m[1]+'</div>';return '<div class="bub'+(m[0]==='me'?' me':'')+'">'+m[1]+'</div>';}).join('');
+ var noMe=!(p.msgs||[]).some(function(m){return m[0]==='me'});
+ var avsMini=p.p.slice(0,5).map(function(x){return x[4]?'<img class="ava" src="'+x[4]+'" style="width:18px;height:18px">':'<span class="ava" style="width:18px;height:18px;font-size:9px;background:'+x[1]+'">'+x[0].charAt(0)+'</span>';}).join('');
+ var pinRight=p.ended?'':(!p.meet?B('','setMeet()','集合を決める','width:auto;padding:8px 14px;font-size:12.5px;box-shadow:none'):'<span style="font-size:11.5px;font-weight:700;color:#2FA97C"><i class="ti ti-check"></i> 集合決定済み</span>');
+ var dayRow=(p.meet&&!p.ended)?'<div class="row2" style="margin-top:10px">'
+  +'<span class="pill" style="flex:1;justify-content:center;margin:0" onclick="dayMsg(\'向かっています\')">🚶 向かってる</span>'
+  +'<span class="pill" style="flex:1;justify-content:center;margin:0" onclick="dayMsg(\'5分ほど遅れます\')">⏰ 遅れる</span>'
+  +'<span class="pill" style="flex:1;justify-content:center;margin:0" onclick="dayMsg(\'到着しました\')">✅ 着いた</span></div>':'';
+ var links='';
+ if(!p.ended){var ls=['<span class="lk" style="font-size:11.5px" onclick="go(\'share\')">集合情報をシェア</span>'];
+  if(p.meet)ls.push('<span class="lk" style="font-size:11.5px" onclick="sheet(\'shop\')">近くのお店（PR）</span>');
+  if(p.meet&&!p.rated)ls.push('<span class="lk" style="font-size:11.5px" onclick="openRate()">解散して評価する</span>');
+  links='<div class="r" style="gap:14px;justify-content:center;margin-top:10px;flex-wrap:wrap">'+ls.join('')+'</div>';}
+ var pin='<div class="card" style="padding:11px 13px;margin-bottom:8px"><div class="sb"><span style="font-size:13px;font-weight:700">⏰ '+(p.time==='未定'?'時間はチャットで相談':p.time+'〜')+' ・ '+p.area+'</span>'+pinRight+'</div>'+dayRow+links+'</div>';
+ var firstWord=(noMe&&!p.ended)?'<div class="mut" style="font-size:11px;margin:10px 2px 2px">最初のひとことに迷ったら</div><div>'
+  +['よろしくお願いします！','集合はどのあたりにしますか？','楽しみにしてます！'].map(function(t){return '<span class="pill" style="font-size:11.5px" onclick="quickMsg(\''+t+'\')">'+t+'</span>';}).join('')+'</div>':'';
+ var inputRow=p.ended
+  ?'<div class="mut" style="text-align:center;margin-top:12px">このチャットは終了しました（閲覧のみ）</div>'
+  :'<div class="r" style="gap:9px;margin-top:10px"><input class="inp" style="padding:11px" placeholder="メッセージを入力…" id="msgin" value="'+S.draft+'" oninput="S.draft=clean(this.value)" onkeydown="if(event.key===\'Enter\')sendMsg()"><div class="em" style="width:42px;height:42px;background:#FF7A45;color:#fff;cursor:pointer;border-radius:13px" onclick="sendMsg()"><i class="ti ti-send" style="font-size:17px"></i></div></div>';
+ var rematch=(p.rated&&!p.ended)?B('g','sheet(\'rematch\')','🔁 このメンバーでまた遊ぶ','margin-top:12px'):'';
+ return '<div class="sb" style="border-bottom:1px solid #F0E8D5;padding-bottom:10px;margin-bottom:10px"><div class="r"><span class="back" onclick="goTab(\'chats\')">‹</span><div><div style="font-weight:700;font-size:14px">'+CATS[p.cat].e+' '+p.title+(p.ended?' <span class="badge" style="background:#F1EAD8;color:#A79B84">終了</span>':'')+'</div><div class="r" style="gap:5px;margin-top:4px;cursor:pointer" onclick="sheet(\'members\')"><span class="avs">'+avsMini+'</span><span class="mut" style="font-size:11px">'+mc(p)+'人 ›</span></div></div></div>'
+ +'<span class="r" style="gap:14px"><i class="ti ti-urgent" style="font-size:21px;color:#E25B4C;cursor:pointer" onclick="go(\'sos\')" title="緊急"></i><i class="ti ti-shield" style="font-size:20px;color:#A79B84;cursor:pointer" onclick="sheet(\'members\')" title="メンバー・通報"></i></span></div>'
+ +pin
+ +body
+ +firstWord
+ +inputRow
+ +rematch;}
+function quickMsg(t){if(!S.mychat||S.mychat.ended)return;S.mychat.msgs.push(['me',t]);render();}
+function dayMsg(t){if(!S.mychat)return;S.mychat.msgs.push(['sys',S.name+'さん: '+t]);render();}
+function setMeet(){var p=S.mychat;if(!p)return;p.meet=true;p.msgs.push(['sys',(p.official||p.time==='未定')?'集合の時間と場所が決まったら、ここでみんなに共有しましょう':'集合: '+p.time+' '+p.area+' に決定しました']);render();}
+function sendMsg(){var p=S.mychat;if(!p||p.ended)return;var v=clean(S.draft||'').trim();if(v){p.msgs.push(['me',v]);S.draft='';render();}}
+function share(){var p=S.mychat;return '<div class="r" style="margin-bottom:10px"><span class="back" onclick="openChat()">‹</span><span class="tt" style="margin-left:8px;font-size:18px">集合情報をシェア</span></div>'
+ +'<div class="mut" style="margin-bottom:14px;line-height:1.8">アプリを入れていない友達や家族に、集合場所・時間・人数をリンクで伝えられます。<br>送る相手はあなたが自分で選びます（グループのメンバーには送られません）。</div>'
+ +'<div class="card"><div class="sb"><span style="font-weight:500">'+(p?p.area+' '+p.time:'')+'</span><span class="mut">'+(p?mc(p):'')+'人</span></div></div>'
+ +B('','toast(\'共有リンクを作成しました（OSの共有画面が開きます・デモ）\')','共有リンクを作る')+B('g','openChat()','戻る','margin-top:10px');}
+function sos(){return '<div class="r" style="margin-bottom:10px"><span class="back" onclick="openChat()">‹</span><span class="tt" style="margin-left:8px;font-size:18px;color:#E25B4C">緊急時</span></div>'
+ +'<div class="warn"><i class="ti ti-alert-triangle"></i> 110は緊急時のみ使用してください。いたずら・虚偽の通報は処罰の対象です。緊急でない相談は警察相談専用電話 <b>#9110</b> へ。</div>'
+ +B('rd','alert(\'デモ: 電話アプリで110に発信します（発信前に確認画面が入ります）\')','<i class="ti ti-phone" style="font-size:20px"></i> 110 に発信（警察）')
+ +B('g','alert(\'デモ: 電話アプリで119に発信します\')','119（救急・火事）','margin-top:8px')
+ +'<div class="card" style="margin-top:13px"><div class="mut">現在地</div><div style="height:74px;background:#F5EFDF;border-radius:12px;display:flex;align-items:center;justify-content:center;color:#9A8E78;margin-top:8px;gap:6px"><i class="ti ti-map-pin" style="color:#E25B4C;font-size:20px"></i> 渋谷区宇田川町 付近</div></div>'
+ +'<div class="card"><div style="font-weight:700;margin-bottom:8px;font-size:14px">安全ガイド</div><div class="mut" style="line-height:2">・人の多い公共の場所へ移動する<br>・信頼できる人に状況を共有する<br>・危険を感じたら迷わず110へ</div></div>'
+ +'<div class="mut" style="text-align:center;font-size:11px">※通報はご自身で行ってください。アプリによる代行通報は行いません</div>';}
+
+// ===== 評価（相手ごと・全員「また遊びたい」でチャット存続） =====
+function openRate(){var p=S.mychat;
+ if(!p||!isJoined(p)||mc(p)<3){toast('評価できる予定がありません');goTab('chats');return;}
+ if(!p.rmap)p.rmap={};go('rate');}
+function rate(){var p=S.mychat;if(!p)return chats();
+ var others=p.p.filter(function(x){return x[7]!=='me'});
+ var all=others.length>0&&others.every(function(x){return p.rmap[x[7]]});
+ var rows=others.map(function(x){var v=p.rmap[x[7]];
+  return '<div class="card"><div class="r" style="margin-bottom:10px">'+ava1(x,34)+'<span style="font-weight:500">'+x[0]+'</span><span class="mut" style="font-size:11px">'+x[3]+'</span></div>'
+  +'<div class="row2"><span class="pill" style="flex:1;justify-content:center;margin:0;'+(v==='g'?'background:#2FA97C;color:#fff;border-color:transparent':'')+'" onclick="S.mychat.rmap[\''+x[7]+'\']=\'g\';render()">😄 また遊びたい</span><span class="pill" style="flex:1;justify-content:center;margin:0;'+(v==='b'?'background:#B0A38B;color:#fff;border-color:transparent':'')+'" onclick="S.mychat.rmap[\''+x[7]+'\']=\'b\';render()">😐 合わなかった</span></div></div>';}).join('');
+ return '<div class="r" style="margin-bottom:10px"><span class="back" onclick="openChat()">‹</span><span class="tt" style="margin-left:8px;font-size:18px">今日はどうでしたか？</span></div>'
+ +'<div class="mut" style="margin-bottom:6px">相手ごとに評価してください。双方が提出するまで相手には公開されません。</div>'
+ +'<div class="mut" style="margin-bottom:14px;font-size:11px">全員「また遊びたい」ならチャットが残ります。1人でも「合わなかった」があると、このグループのチャットは終了します。</div>'
+ +rows
+ +'<div class="btn'+(all?'':' dis')+'" role="button" onclick="'+(all?'rateSubmit()':'')+'">提出する</div>'
+ +'<div class="lk" style="text-align:center;margin-top:18px" onclick="sheet(\'members\')"><i class="ti ti-shield"></i> トラブルがあった場合の通報・ブロック</div>';}
+function rateSubmit(){var p=S.mychat;if(!p)return;
+ var bad=Object.keys(p.rmap).some(function(k){return p.rmap[k]==='b'});
+ if(bad){S.rtags=[];go('ratebad');return;}
+ p.rated=true;p.rmap=null;
+ p.msgs.push(['sys','評価を送信しました。全員「また遊びたい」のため、このチャットは残ります']);
+ go('thanks');}
+function endAndGo(s){var p=S.mychat;if(p){p.ended=true;p.rmap=null;}go(s);}
+function ratebad(){var p=S.mychat;var tags=['ドタキャン','遅刻','失礼な態度','勧誘された','話が合わなかった','その他'];
+ var names=(p&&p.rmap)?p.p.filter(function(x){return p.rmap[x[7]]==='b'}).map(function(x){return x[0]}).join('・'):'';
+ var needOther=S.rtags.indexOf('その他')>=0;
+ var ok=S.rtags.length&&(!needOther||(S.rOther&&S.rOther.trim().length>0));
+ return '<div class="r" style="margin-bottom:10px"><span class="back" onclick="go(\'rate\')">‹</span><span class="tt" style="margin-left:8px;font-size:18px">理由を選んでください</span></div>'
+ +'<div class="mut" style="margin-top:4px">対象: '+names+'さん。低評価には理由の選択が必要です（相手には公開されません）</div>'
+ +'<div style="margin:16px 0 8px">'+tags.map(function(t){return '<span class="pill '+(S.rtags.indexOf(t)>=0?'on':'')+'" onclick="tgTag(\''+t+'\')">'+t+'</span>';}).join('')+'</div>'
+ +(needOther?'<input class="inp" id="otherin" placeholder="理由をご記入ください" value="'+(S.rOther||'')+'" oninput="S.rOther=clean(this.value);updOther()" style="margin-bottom:12px">':'')
+ +'<div class="btn'+(ok?'':' dis')+'" id="ratebadbtn" role="button" onclick="endAndGo(\'thanks\')">提出する</div>'
+ +'<div class="lk" style="text-align:center;margin-top:16px" onclick="sheet(\'members\')"><i class="ti ti-shield"></i> 通報が必要な内容の場合はこちら</div>';}
+function thanks(){var p=S.mychat;
+ if(p&&!p.ended)return '<div style="text-align:center;padding-top:60px" class="pop"><div style="font-size:44px">🔁</div><div class="tt" style="margin-top:12px">提出しました</div><div class="mut" style="margin-top:10px;line-height:1.8">全員「また遊びたい」でした。<br>このチャットは残るので、いつでも次の予定を立てられます</div><div style="margin-top:28px">'+B('','openChat()','チャットへ戻る')+B('g','goTab(\'home\')','ホームへ','margin-top:10px')+'</div></div>';
+ return '<div style="text-align:center;padding-top:66px"><div style="font-size:44px">✅</div><div class="tt" style="margin-top:12px">提出しました</div><div class="mut" style="margin-top:10px">チャットは「やりとり」に残ります（閲覧のみ）</div><div style="margin-top:30px">'+B('','goTab(\'home\')','ホームへ')+'</div></div>';}
+
+// ===== 通報・ブロック（予定・人とも カテゴリ+理由必須） =====
+function preport(){
+ var cats=S.repKind==='plan'
+  ?['スパム・宣伝目的','出会い・性的目的','闇バイト・違法勧誘','危険な内容','その他']
+  :['緊急の危険','犯罪・売春','闇バイト・違法勧誘','年齢詐称','ドタキャン・無断欠席','勧誘(宗教/マルチ)','ハラスメント','なりすまし','その他'];
+ var heavy=['緊急の危険','犯罪・売春','闇バイト・違法勧誘','年齢詐称','出会い・性的目的','危険な内容'].indexOf(S.rcat)>=0;
+ return '<div class="r" style="margin-bottom:8px"><span class="back" onclick="goRet()">‹</span><span class="tt" style="margin-left:8px;font-size:18px">'+S.rtarget+(S.repKind==='plan'?'を通報':'さんを通報')+'</span></div>'
+ +'<div class="mut" style="margin-bottom:11px">カテゴリを選択のうえ、状況を具体的にご記入ください。両方の入力が必要です。</div>'
+ +cats.map(function(c){return '<span class="pill '+(S.rcat===c?'on':'')+'" onclick="S.rcat=\''+c+'\';render();setTimeout(upd,0)">'+c+'</span>';}).join('')
+ +'<textarea class="inp" style="margin-top:8px;height:72px;resize:none" placeholder="何があったかを具体的にご記入ください" oninput="S.rtxt=clean(this.value);upd()">'+(S.rtxt||'')+'</textarea>'
+ +(heavy?'<div class="mut" style="color:#B4552B;margin-top:8px"><i class="ti ti-bolt"></i> このカテゴリの通報は、運営が優先して確認します。</div>':'')
+ +'<div class="btn rd" id="rsend" role="button" onclick="go(\'reportdone\')" style="margin-top:12px;opacity:.4;pointer-events:none">通報する</div>';}
+function reportdone(){return '<div style="text-align:center;padding-top:60px"><div style="font-size:44px">🛡️</div><div class="tt" style="margin-top:12px">通報を受け付けました</div>'
+ +'<div class="mut" style="margin-top:12px;line-height:1.9">内容を運営が確認いたします。</div>'
+ +'<div style="margin-top:24px">'+(S.repKind==='user'?B('rd','block(S.rtarget);goRet()','この相手をブロック'):'')+B('g','S.rcat=null;S.rtxt=null;goRet()','戻る','margin-top:10px')+'</div></div>';}
+function goRet(){if(S.retTo==='detail')go('detail');else if(S.retTo==='rate')go('rate');else if(S.retTo==='chat')openChat();else goTab('home');}
+function viewMember(pid,i){var p=plans.filter(function(x){return x.id==pid})[0];if(p&&p.p[i]){S.pv=p.p[i];sheet('member');}}
+function viewByUid(u){for(var i=0;i<plans.length;i++){var f=plans[i].p.filter(function(x){return x[7]===u});if(f.length){S.pv=f[0];sheet('member');return;}}}
+function rep(n){S.rtarget=n;S.repKind='user';S.rcat=null;S.rtxt=null;
+ S.retTo=(S.screen==='detail')?'detail':((S.screen==='rate'||S.screen==='ratebad')?'rate':(S.screen==='chat'?'chat':'home'));
+ S.sheet=null;go('preport');}
+function repPlan(){S.rtarget='この予定';S.repKind='plan';S.rcat=null;S.rtxt=null;S.retTo='detail';go('preport');}
+function block(n){if(S.blocked.indexOf(n)<0)S.blocked.push(n);S.sheet=null;toast(n+'さんをブロックしました');}
+function unblock(n){S.blocked=S.blocked.filter(function(b){return b!=n});render();}
+
+// ===== 予定を立てる =====
+function openCreate(){if(S.cat!=='all'&&CATS[S.cat])S.cCat=S.cat;go('create');}
+function timeOpts(){var arr=[];for(var h=0;h<=23;h++){['00','30'].forEach(function(mm){var t=(h<10?'0'+h:h)+':'+mm;
+ if(S.cDay===DAYS7[0].k&&t<=NOW)return;arr.push(t);});}return arr;}
+function create(){
+ var opts=timeOpts();if(opts.indexOf(S.cTime)<0)S.cTime=opts[0];
+ var catChips=Object.keys(CATS).map(function(k){var C=CATS[k];var dis=(k=='nomi'&&calcAge()<20);var on=S.cCat==k;
+  return '<span class="pill'+(on?' on':'')+'" style="'+(on?'background:'+C.c+';color:#fff':(dis?'opacity:.4':''))+'" onclick="'+(dis?'toast(\'「飲み」の予定は20歳以上のみ作成できます\')':'S.cCat=\''+k+'\';render()')+'">'+C.e+' '+C.n+'</span>';}).join('');
+ var days=dtiles(S.cDay,'S.cDay');
+ var to=opts.map(function(t){return '<option'+(S.cTime===t?' selected':'')+'>'+t+'</option>';}).join('');
+ var durs=['約1時間','約2時間','約3時間','未定'].map(function(d){return '<span class="pill '+(S.cDur==d?'on':'')+'" onclick="S.cDur=\''+d+'\';render()">'+d+'</span>';}).join('');
+ var near=['渋谷駅','原宿駅','表参道駅'];
+ var stations=near.map(function(a){return '<span class="pill '+(S.cArea==a?'on':'')+'" onclick="S.cArea=\''+a+'\';render()">'+a+'</span>';}).join('');
+ return '<div class="r" style="margin-bottom:4px"><span class="back" onclick="goTab(\'home\')">‹</span><span class="tt" style="margin-left:8px">予定を立てる</span></div>'
+ +'<div class="mut" style="margin:0 0 16px 2px">30秒で完了。一緒に遊ぶメンバーを募集します</div>'
+ +'<div class="mut" style="margin-bottom:6px">カテゴリ（必須）</div><div style="margin-bottom:12px">'+catChips+'</div>'
+ +'<div class="mut" style="margin-bottom:6px">タイトル'+(S.cCat==='other'?'（必須：何をするか書いてください）':'')+'</div><input class="inp" maxlength="25" placeholder="例: '+(S.cCat&&CATS[S.cCat]&&S.cCat!=='other'?CATS[S.cCat].n+'行ける人募集':'ボウリング行ける人募集')+'" value="'+S.cTitle+'" oninput="S.cTitle=clean(this.value)" style="margin-bottom:12px">'
+ +'<div class="mut" style="margin-bottom:6px">駅（必須）</div><input class="inp" list="stlist" placeholder="駅名で検索（例: 横浜駅）" value="'+(near.indexOf(S.cArea)<0?S.cArea:'')+'" oninput="S.cArea=clean(this.value)" style="margin-bottom:6px">'
+ +'<div class="mut" style="margin-bottom:4px;font-size:11px">現在地から近い駅</div><div style="margin-bottom:8px">'+stations+'</div>'
+ +'<div class="mut" style="margin-bottom:6px">詳しい場所（任意・店名や住所など）</div><input class="inp" placeholder="例: ハチ公前 / ○○カラオケ 3号店" value="'+S.cMemo+'" oninput="S.cMemo=clean(this.value)" style="margin-bottom:12px">'
+ +'<div class="mut" style="margin-bottom:6px">日付</div><div style="white-space:nowrap;overflow-x:auto;scrollbar-width:none">'+days+'</div>'
+ +'<div class="mut" style="margin:6px 0">開始時間 と 終了目安</div><div class="row2" style="margin-bottom:4px"><select class="inp" onchange="S.cTime=this.value">'+to+'</select></div><div style="margin-bottom:12px">'+durs+'</div>'
+ +'<div class="mut" style="margin-bottom:6px">参加できる人</div><div style="margin-bottom:4px"><span class="pill '+(!S.cSameG?'on':'')+'" onclick="S.cSameG=false;render()">誰でも</span><span class="pill '+(S.cSameG?'on':'')+'" onclick="S.cSameG=true;render()">同性のみ</span></div>'
+ +(S.cSameG?'<div class="mut" style="margin-bottom:12px;font-size:11px">同性のみにすると安心度は上がりますが、集まりにくくなる場合があります</div>':'<div style="margin-bottom:12px"></div>')
+ +'<div class="mut" style="margin-bottom:6px">人数</div><div style="margin-bottom:16px">'+[3,4,5].map(function(n){return '<span class="pill '+(S.cCap==n?'on':'')+'" onclick="S.cCap='+n+';render()">'+n+'人</span>';}).join('')+'</div>'
+ +B('','createSubmit()','内容を確認して募集する');}
+function createSubmit(){
+ S.cTitle=clean(S.cTitle).trim();S.cArea=clean(S.cArea).trim();S.cMemo=clean(S.cMemo).trim();
+ if(!S.cCat){toast('カテゴリを選択してください');return;}
+ if(!S.cArea){toast('駅を入力してください');render();return;}
+ if(S.cCat==='other'&&!S.cTitle){toast('「その他」はタイトルに内容をご記入ください');render();return;}
+ sheet('pubconfirm');}
+function publishGo(){var C=CATS[S.cCat];S.sheet=null;
+ plans.push({id:Date.now(),cat:S.cCat,title:(S.cTitle||C.n+'行ける人募集'),area:S.cArea,memo:S.cMemo,dist:0.8,day:S.cDay,time:S.cTime,dur:S.cDur,cap:S.cCap,sameG:S.cSameG,minAge:(S.cCat=='nomi'?20:null),likes:0,p:[[S.name,S.myc,S.gender,myLabel(),S.photo,S.tags.slice(),null,'me','host']],host:'me'});
+ S.cTitle='';S.cArea='';S.cMemo='';go('created');}
+function created(){return '<div style="text-align:center;padding-top:60px" class="pop"><div style="font-size:46px">📣</div><div class="tt" style="margin-top:12px">募集を公開しました</div>'
+ +'<div class="mut" style="margin-top:12px;line-height:1.9">メンバーが集まると成立します。<br>状況は「やりとり」の自分の立てた予定から確認できます。<br>成立するとホスト特典チケット🎟がもらえます。</div>'
+ +'<div style="margin-top:28px">'+B('','goTab(\'chats\')','自分の立てた予定を見る')+'</div></div>';}
+
+// ===== やりとり =====
+function evalPlan(){return plans.filter(function(p){return isJoined(p)&&mc(p)>=3&&p.meet&&!p.rated&&!p.ended})[0]||null;}
+function chats(){var hosted=plans.filter(function(p){return p.host==='me';});
+ var liked=plans.filter(function(p){return S.bmk.indexOf(p.id)>=0&&p.host!=='me';});
+ var groups=plans.filter(function(p){return isJoined(p)&&mc(p)>=3;});
+ var soonP=plans.filter(function(p){return p.id===1&&soon(p)&&!isJoined(p)&&!hasBlocked(p)})[0];
+ var ev=evalPlan();
+ var news='';
+ if(soonP)news+='<div class="card" onclick="openP(1)" style="cursor:pointer"><div class="r"><div class="em" style="font-size:18px;background:rgba(255,122,69,.15)">🔔</div><div style="flex:1"><div style="font-weight:700;font-size:13.5px">あと1人で成立します</div><div class="mut" style="margin-top:2px;font-size:11.5px">「サクッと軽く飲み」（渋谷駅 21:00〜）が残り1枠です</div></div></div></div>';
+ if(ev)news+='<div class="card" onclick="S.mychat=plans.filter(function(p){return p.id==='+ev.id+'})[0];openRate()" style="cursor:pointer"><div class="r"><div class="em" style="font-size:18px;background:rgba(245,183,61,.13)">⭐</div><div style="flex:1"><div style="font-weight:700;font-size:13.5px">評価のお願い</div><div class="mut" style="margin-top:2px;font-size:11.5px">「'+ev.title+'」のメンバーを評価してください</div></div></div></div>';
+ if(!news)news='<div class="mut" style="padding:6px 2px">新しいお知らせはありません</div>';
+ var gs=groups.length?groups.map(function(p){return '<div class="card" onclick="openChatFor('+p.id+')" style="cursor:pointer"><div class="r"><div class="em" style="background:'+CATS[p.cat].c+'22">'+CATS[p.cat].e+'</div><div style="flex:1"><div class="sb"><span style="font-weight:700;font-size:14px">'+p.title+'</span>'+(p.ended?'<span class="badge" style="background:#F1EAD8;color:#A79B84">終了</span>':'<span class="mut" style="font-size:11px">'+p.time+'</span>')+'</div><div class="mut" style="margin-top:2px;font-size:11.5px">'+((p.msgs&&p.msgs.length)?p.msgs[p.msgs.length-1][1]:'グループチャットが開きました')+'</div></div>'+(p.ended?'':'<span style="width:8px;height:8px;border-radius:50%;background:#FF7A45"></span>')+'</div></div>';}).join('')
+  :'<div class="mut" style="padding:6px 2px">成立したグループはまだありません</div>';
+ var ls=liked.length?liked.map(function(p){return '<div class="card" onclick="openP('+p.id+')" style="cursor:pointer"><div class="r"><div class="em" style="background:'+CATS[p.cat].c+'22">'+CATS[p.cat].e+'</div><div style="flex:1"><div style="font-weight:700;font-size:14px">'+p.title+'</div><div class="mut" style="margin-top:2px;font-size:11.5px">'+dayLabel(p.day)+' '+p.time+' ・ '+p.area+' ・ '+mc(p)+'/'+p.cap+'人</div></div><i class="ti ti-heart-filled" style="color:#FF7A45"></i></div></div>';}).join(''):'';
+ var mine=hosted.length?hosted.map(function(p){return '<div class="card" onclick="openHost('+p.id+')" style="cursor:pointer"><div class="r"><div class="em" style="background:'+CATS[p.cat].c+'22">'+CATS[p.cat].e+'</div><div style="flex:1"><div class="sb"><span style="font-weight:700;font-size:14px">'+p.title+'</span><span class="badge" style="background:'+(mc(p)>=3?'rgba(47,169,124,.13);color:#2FA97C':'rgba(245,183,61,.15);color:#B47A0B')+'">'+(mc(p)>=3?'成立':'募集中')+'</span></div><div class="mut" style="margin-top:2px;font-size:11.5px">'+dayLabel(p.day)+' '+p.time+' ・ '+mc(p)+'/'+p.cap+'人 ・ ♥'+(p.likes||0)+'</div></div></div></div>';}).join(''):'<div class="mut" style="padding:6px 2px">立てた予定はありません</div>';
+ return '<div class="tt">やりとり</div>'
+ +'<div class="h3" style="display:flex;align-items:center;justify-content:space-between"><span>お知らせ</span><span class="lk" style="font-size:11.5px" onclick="go(\'notifs\')">すべて見る</span></div>'+news
+ +'<div class="h3">グループ</div>'+gs
+ +(ls?'<div class="h3">いいねした予定</div>'+ls:'')
+ +'<div class="h3" style="display:flex;align-items:center;justify-content:space-between"><span>自分の立てた予定</span><span class="lk" style="font-size:11.5px" onclick="openCreate()">＋ 予定を立てる</span></div>'+mine;}
+function openHost(id){S.curHost=plans.filter(function(p){return p.id==id})[0];go('host_manage');}
+function host_manage(){var p=S.curHost;if(!p)return chats();
+ return '<div class="r" style="margin-bottom:10px"><span class="back" onclick="goTab(\'chats\')">‹</span><span class="tt" style="margin-left:8px;font-size:18px">予定の管理</span></div>'
+ +'<div class="r" style="margin-bottom:12px"><div class="em" style="width:48px;height:48px;font-size:23px;background:'+CATS[p.cat].c+'22">'+CATS[p.cat].e+'</div><div><div style="font-weight:700;font-size:16px">'+p.title+'</div><div class="mut">'+dayLabel(p.day)+' '+p.time+'〜（'+(p.dur||'未定')+'） ・ '+p.area+'</div></div></div>'
+ +'<div class="card"><div class="sb"><span class="mut">状態</span><span style="font-weight:500">'+(mc(p)>=3?'成立':'募集中')+' '+mc(p)+'/'+p.cap+'人</span></div></div>'
+ +'<div class="card"><div class="r" style="gap:6px"><i class="ti ti-heart-filled" style="color:#FF7A45"></i><span style="font-size:13.5px;font-weight:500">'+(p.likes||0)+'人がこの予定をいいねしています</span></div>'+(p.likes>0&&mc(p)<p.cap?'<div class="mut" style="margin-top:4px;font-size:11px">気になっている人がいます。時間や場所の調整で参加しやすくなるかもしれません</div>':'')+'</div>'
+ +'<div class="h3">メンバー</div><div class="card">'+p.p.map(function(x,i){return '<div class="r" style="padding:6px 0;cursor:pointer'+(i?';border-top:1px solid #F3ECDA':'')+'" onclick="viewMember('+p.id+','+i+')">'+ava1(x,34)+'<span style="font-weight:500">'+x[0]+'</span><span class="mut" style="font-size:11.5px">'+x[3]+'</span>'+(i==0?'<span class="badge" style="background:rgba(245,183,61,.15);color:#B47A0B">👑 あなた</span>':'')+'<i class="ti ti-chevron-right" style="margin-left:auto;color:#C9BDA4"></i></div>';}).join('')+'</div>'
+ +(mc(p)>=3?B('','openChatFor('+p.id+')','グループチャットへ'):'')
+ +B('g','S.cancelId='+p.id+';sheet(\'cancelc\')','募集を取り消す','margin-top:8px;color:#E25B4C');}
+function cancelHost(id){plans=plans.filter(function(p){return p.id!=id});if(S.mychat&&S.mychat.id===id)S.mychat=null;S.sheet=null;toast('募集を取り消しました');goTab('chats');}
+function leaveGroup(){var p=S.mychat;if(p){var me=meIn(p);if(me)refundFor(me[8]==='free'||me[8]==='ticket'?null:null);p.p=p.p.filter(function(x){return x[7]!=='me'&&String(x[7]).indexOf('friend-')!==0});}
+ S.mychat=null;S.sheet=null;toast('グループから退出しました（予定は募集に戻ります）');goTab('chats');}
+
+// ===== マイページ・設定 =====
+function history(){return setHead('参加履歴')
+ +'<div class="card"><div class="r"><div class="em" style="background:'+CATS.karaoke.c+'22">🎤</div><div style="flex:1"><div class="sb"><span style="font-weight:700;font-size:14px">カラオケ2時間</span><span class="mut" style="font-size:11px">6/28(日)</span></div><div class="mut" style="margin-top:2px;font-size:11.5px">新宿駅 ・ 3人 ・ 評価提出済み 😄</div></div></div></div>'
+ +'<div class="card"><div class="r"><div class="em" style="background:'+CATS.gohan.c+'22">🍜</div><div style="flex:1"><div class="sb"><span style="font-weight:700;font-size:14px">つけ麺食べ比べ</span><span class="mut" style="font-size:11px">6/25(木)</span></div><div class="mut" style="margin-top:2px;font-size:11.5px">渋谷駅 ・ 3人 ・ 評価提出済み 😄</div></div></div></div>'
+ +'<div class="mut" style="margin-top:4px">直近90日の参加が表示されます（デモ）</div>';}
+function notifs(){var soonP=plans.filter(function(p){return p.id===1&&soon(p)&&!isJoined(p)&&!hasBlocked(p)})[0];var ev=evalPlan();var out='';
+ if(soonP)out+='<div class="card" onclick="openP(1)" style="cursor:pointer"><div class="r"><div class="em" style="font-size:18px;background:rgba(255,122,69,.15)">🔔</div><div style="flex:1"><div style="font-weight:700;font-size:13.5px">あと1人で成立します</div><div class="mut" style="margin-top:2px;font-size:11.5px">「サクッと軽く飲み」（渋谷駅 21:00〜）が残り1枠です</div></div></div></div>';
+ if(ev)out+='<div class="card" onclick="S.mychat=plans.filter(function(p){return p.id==='+ev.id+'})[0];openRate()" style="cursor:pointer"><div class="r"><div class="em" style="font-size:18px;background:rgba(245,183,61,.13)">⭐</div><div style="flex:1"><div style="font-weight:700;font-size:13.5px">評価のお願い</div><div class="mut" style="margin-top:2px;font-size:11.5px">「'+ev.title+'」のメンバーを評価してください</div></div></div></div>';
+ var off=plans.filter(function(p){return p.official&&!isJoined(p)})[0];
+ if(off)out+='<div class="card" onclick="openP('+off.id+')" style="cursor:pointer"><div class="r"><div class="em" style="font-size:18px;background:rgba(245,183,61,.18)">🏷️</div><div style="flex:1"><div style="font-weight:700;font-size:13.5px">公式企画のご案内</div><div class="mut" style="margin-top:2px;font-size:11.5px">はじめての方向け「3人カフェ会」を開催します（きょう・詳細はチャットで相談）</div></div></div></div>';
+ out+='<div class="card" onclick="goLegal(\'guidelines\')" style="cursor:pointer"><div class="r"><div class="em" style="font-size:18px;background:rgba(47,169,124,.12)">📋</div><div style="flex:1"><div style="font-weight:700;font-size:13.5px">コミュニティガイドラインを公開しました</div><div class="mut" style="margin-top:2px;font-size:11.5px">安心して遊ぶための5つのルールをご確認ください</div></div></div></div>';
+ return '<div class="r" style="margin-bottom:10px"><span class="back" onclick="goTab(\'chats\')">‹</span><span class="tt" style="margin-left:8px;font-size:18px">お知らせ</span></div>'+out;}
+function guidelines(){
+ return '<div class="r" style="margin-bottom:10px"><span class="back" onclick="legalBack()">‹</span><span class="tt" style="margin-left:8px;font-size:18px">コミュニティガイドライン</span></div>'
+ +'<div class="mut" style="margin-bottom:12px">全員が安心して遊ぶための5つのルールです</div>'
+ +'<div class="card"><div style="font-weight:700;font-size:13.5px">1. 会う約束は守る</div><div class="mut" style="margin-top:4px">無断キャンセルを繰り返すと参加が制限されます。行けなくなったら必ずチャットで連絡してください。</div></div>'
+ +'<div class="card"><div style="font-weight:700;font-size:13.5px">2. 勧誘・営業は禁止</div><div class="mut" style="margin-top:4px">宗教・マルチ・投資・ビジネス等の勧誘は即時利用停止の対象です。</div></div>'
+ +'<div class="card"><div style="font-weight:700;font-size:13.5px">3. 20歳未満の飲酒は禁止</div><div class="mut" style="margin-top:4px">法律で禁止されています。年齢の虚偽申告は利用停止の対象です。</div></div>'
+ +'<div class="card"><div style="font-weight:700;font-size:13.5px">4. はじめては公共の場所で</div><div class="mut" style="margin-top:4px">初対面の集合は駅前やお店など、人の多い場所を選びましょう。</div></div>'
+ +'<div class="card"><div style="font-weight:700;font-size:13.5px">5. 困ったら通報</div><div class="mut" style="margin-top:4px">通報には運営が対応します。緊急時はチャットの🚨から110へ発信できます。</div></div>'
+ +B('g','legalBack()','閉じる','margin-top:8px');}
+function mypage(){var pm=S.premium;
+ return '<div class="sb"><div class="tt">マイページ</div><span class="lk" onclick="openEdit()">編集</span></div>'
+ +'<div class="card" style="text-align:center;padding:22px;margin-top:12px"><div style="display:flex;justify-content:center;margin-bottom:8px">'+myAva(60)+'</div>'
+ +'<div style="font-weight:700;font-size:18px">'+S.name+'</div><div class="mut" style="margin-top:3px">東京工科大学 ・ '+calcAge()+'歳</div>'
+ +'<div style="margin-top:8px">'+vbadge()+(pm?' <span style="font-size:11px;color:#B47A0B;background:rgba(245,183,61,.15);padding:4px 10px;border-radius:999px;font-weight:700"><i class="ti ti-crown"></i> プレミアム</span>':'')+'</div>'
+ +(S.tags.length?'<div style="margin-top:10px">'+tagPills(S.tags)+'</div>':'')+'</div>'
+ +(pm?'<div class="card"><div class="sb"><span class="mut">今月の参加</span><span style="font-weight:700;color:#2FA97C">無制限</span></div></div>'
+   :'<div class="card"><div class="sb"><span class="mut">今月の無料参加</span><span style="font-weight:700">'+S.used+' / '+S.limit+'回</span></div><div class="meter"><div style="width:'+Math.min(100,Math.round(S.used/S.limit*100))+'%"></div></div>'+(S.tickets?'<div class="mut" style="margin-top:8px">参加チケット '+S.tickets+'枚</div>':'')+'<div class="lk" style="margin-top:9px" onclick="go(\'premium\')">プレミアムで参加し放題 →</div></div>')
+ +'<div class="card"><div class="sb"><div><div style="font-weight:700;font-size:13.5px">友達を招待</div><div class="mut" style="font-size:11px;margin-top:2px">友達が登録すると、お互いに参加チケット1枚（準備中）</div></div>'+B('g','toast(\'招待リンクをコピーしました（デモ）\')','コピー','width:auto;padding:8px 12px;font-size:12px')+'</div><div class="mut" style="margin-top:8px;font-size:12px;letter-spacing:1px;font-weight:700">ASOBI-TARO-2K5X</div></div>'
+ +[['ti-user','アカウント','go(\'set_account\')'],['ti-history','参加履歴','go(\'history\')'],['ti-id-badge-2','学生証バッジ（任意）','go(\'set_badge\')'],['ti-bell','通知設定','go(\'set_notif\')'],['ti-map-pin','プライバシー','go(\'set_privacy\')'],['ti-shield','ブロックリスト','go(\'set_safety\')'],['ti-credit-card','支払い・プレミアム','go(\'premium\')'],['ti-file-text','利用規約・プライバシー','goLegal(\'terms\')'],['ti-help','ヘルプ・お問い合わせ','go(\'help\')'],['ti-logout','ログアウト','sheet(\'logout\')']].map(function(r){return '<div class="setrow" onclick="'+r[2]+'"><i class="ti '+r[0]+'"></i><span style="flex:1">'+r[1]+'</span><i class="ti ti-chevron-right" style="color:#C9BDA4"></i></div>';}).join('');}
+// プロフィール編集は下書き方式（保存で確定・戻るで破棄）
+function openEdit(){S.d={name:S.name,photo:S.photo,tags:S.tags.slice()};go('profile_edit');}
+function saveEdit(){var n=clean(S.d.name).trim();
+ if(!n){toast('ニックネームを入力してください');return;}
+ if(!S.d.tags.length){toast('好きなカテゴリを1つ以上選んでください');return;}
+ S.name=n;S.photo=S.d.photo;S.tags=S.d.tags.slice();S.d=null;toast('保存しました');goTab('mypage');}
+function profile_edit(){var d=S.d||{name:S.name,photo:S.photo,tags:S.tags};
+ return '<div class="r" style="margin-bottom:10px"><span class="back" onclick="S.d=null;goTab(\'mypage\')">‹</span><span class="tt" style="margin-left:8px;font-size:18px">プロフィール編集</span></div>'
+ +'<div class="mut" style="margin-bottom:8px">プロフィール写真</div>'
+ +'<div class="r" style="margin-bottom:14px">'+ava1([d.name,S.myc,S.gender,'',d.photo],56)+B('g','addPhoto()','写真を変更（デモ）','width:auto;padding:9px 14px')+'</div>'
+ +'<div class="mut" style="margin-bottom:8px">ニックネーム（10文字まで）</div><input class="inp" maxlength="10" value="'+d.name+'" oninput="S.d.name=clean(this.value)" style="margin-bottom:14px">'
+ +'<div class="mut" style="margin-bottom:8px">好きなカテゴリ（1〜5個）</div><div style="margin-bottom:12px">'+Object.keys(CATS).filter(function(k){return k!=='other'}).map(function(k){var c=CATS[k];return '<span class="pill '+(d.tags.indexOf(k)>=0?'on':'')+'" onclick="tgMyTag(\''+k+'\')">'+c.e+' '+c.n+'</span>';}).join('')+'</div>'
+ +'<div class="card"><div class="sb"><span class="mut">大学</span><span class="lock">東京工科大学 <i class="ti ti-lock"></i></span></div>'
+ +'<div class="sb" style="margin-top:10px"><span class="mut">性別</span><span class="lock">'+(S.gender=='m'?'男性':'女性')+' <i class="ti ti-lock"></i></span></div>'
+ +'<div class="sb" style="margin-top:10px"><span class="mut">生年月日</span><span class="lock">'+S.birth.y+'/'+S.birth.m+'/'+S.birth.d+'（'+calcAge()+'歳） <i class="ti ti-lock"></i></span></div></div>'
+ +'<div class="mut" style="margin:2px 2px 14px;font-size:11px">性別・生年月日は登録後に変更できません。誤りがある場合はヘルプからお問い合わせください</div>'
+ +B('','saveEdit()','保存する')
+ +'<div class="mut" style="text-align:center;margin-top:8px;font-size:11px">保存せずに戻ると変更は破棄されます</div>';}
+function setHead(t){return '<div class="r" style="margin-bottom:10px"><span class="back" onclick="goTab(\'mypage\')">‹</span><span class="tt" style="margin-left:8px;font-size:18px">'+t+'</span></div>';}
+function set_account(){return setHead('アカウント')+'<div class="card"><div class="sb"><span class="mut">大学メール</span><span style="font-size:13px">'+S.email+'</span></div><div class="sb" style="margin-top:10px"><span class="mut">大学</span><span style="font-size:13px">東京工科大学</span></div><div class="sb" style="margin-top:10px"><span class="mut">認証</span><span style="font-size:13px;color:#2FA97C">大学メール認証済み</span></div></div>'+B('g','toast(\'デモ: 再設定メールを送信しました\')','パスワード再設定')+B('rd','sheet(\'quit\')','退会する','margin-top:10px');}
+function set_badge(){return setHead('学生証バッジ')+'<div class="card"><div class="r" style="gap:8px"><i class="ti ti-circle-check" style="color:#2FA97C;font-size:20px"></i><div><div style="font-weight:500">大学メール認証</div><div class="mut">完了</div></div></div></div><div class="card"><div style="font-weight:500;margin-bottom:6px">学生証バッジ（任意）</div><div class="mut" style="line-height:1.8">学生証を提出すると信頼バッジが付きます。提出は任意です。</div></div>'+B('gold','toast(\'申請を受け付けました（デモ）\')','学生証バッジを申請する');}
+function set_notif(){function row(t,k,last){return '<div class="sb" style="padding:10px 0;'+(last?'':'border-bottom:1px solid #F3ECDA')+'"><span style="font-size:14px">'+t+'</span>'+TG(k)+'</div>';}
+ return setHead('通知設定')+'<div class="card">'+row('成立のお知らせ','nMatch')+row('チャットの新着','nChat')+row('集合リマインド','nRemind',true)+'</div>'
+ +'<div class="card"><div class="sb"><div><div style="font-size:14px">位置情報の利用</div><div class="mut" style="margin-top:2px;font-size:11.5px">許可の変更は端末のOS設定から行えます</div></div><span class="lk" style="font-size:11.5px" onclick="toast(\'デモ: OSの設定画面を開きます\')">開く</span></div></div>';}
+function set_privacy(){return setHead('プライバシー')
+ +'<div class="card"><div class="sb" style="padding:10px 0;border-bottom:1px solid #F3ECDA"><div><div style="font-size:14px">位置情報の精度</div><div class="mut" style="margin-top:2px;font-size:11.5px">常にエリア単位で扱われ、正確な位置は保存されません</div></div><span class="mut">固定</span></div>'
+ +'<div class="sb" style="padding:10px 0;border-bottom:1px solid #F3ECDA"><div><div style="font-size:14px">大学名を表示</div><div class="mut" style="margin-top:2px;font-size:11.5px">OFFにすると、これから参加する予定では大学名の代わりに「大学非公開」と表示されます</div></div>'+TG('showUni')+'</div>'
+ +'<div class="sb" style="padding:10px 0"><div><div style="font-size:14px">プライベートモード <i class="ti ti-crown" style="color:#B47A0B;font-size:13px"></i></div><div class="mut" style="margin-top:2px;font-size:11.5px">同じ大学のユーザーの「さがす」にあなたを表示しません（知り合い対策）</div></div>'+(S.premium?TG('privMode'):'<span class="lk" style="font-size:11.5px" onclick="go(\'premium\')">プレミアムで解放</span>')+'</div></div>';}
+function set_safety(){var bl=S.blocked.length?S.blocked.map(function(b){return '<div class="sb" style="padding:11px 0;border-bottom:1px solid #F3ECDA"><span>'+b+'</span><span class="lk" onclick="unblock(\''+b+'\')">解除</span></div>';}).join(''):'<div class="mut" style="padding:14px 0">ブロック中の相手はいません</div>';
+ return setHead('ブロックリスト')+'<div class="card">'+bl+'</div><div class="mut">ブロックは相手に通知されません。ブロック中の相手が含まれる予定は表示されず、参加もできません。</div>';}
+function help(){return setHead('ヘルプ・お問い合わせ')
+ +'<div class="h3">よくある質問</div>'
+ +'<div class="card"><div style="font-weight:700;font-size:13.5px">Q. 参加をやめたいときは？</div><div class="mut" style="margin-top:4px">成立前なら予定の画面から取り消せます（消費した分は戻ります）。成立後はチャットの🛡から退出できます。</div></div>'
+ +'<div class="card"><div style="font-weight:700;font-size:13.5px">Q. 大学メールがac.jpではありません</div><div class="mut" style="margin-top:4px">下のフォームから大学名とメールのドメインをお知らせください。確認のうえ対応します。</div></div>'
+ +'<div class="card"><div style="font-weight:700;font-size:13.5px">Q. 生年月日・性別を間違えて登録しました</div><div class="mut" style="margin-top:4px">ご本人確認のうえ運営が修正します。下のフォームからご連絡ください。</div></div>'
+ +'<div class="h3">お問い合わせ</div><textarea class="inp" style="height:72px;resize:none" placeholder="お困りの内容をご記入ください"></textarea>'
+ +B('','toast(\'送信しました。数日以内にメールで返信します（デモ）\')','送信する','margin-top:10px');}
+function premium(){return '<div class="r" style="margin-bottom:8px"><span class="back" onclick="goTab(\'mypage\')">‹</span><span class="tt" style="margin-left:8px">プレミアム</span></div>'
+ +'<div class="card"><div style="font-weight:700;margin-bottom:8px;color:#A79B84">無料プラン</div><div class="mut" style="line-height:2">・予定への参加は <b style="color:#2B2620">月3回まで</b>（不成立なら回数は戻ります）<br>・予定の作成（3〜5人）、その他の基本機能はすべて無料</div></div>'
+ +'<div class="card" style="border:1.5px solid #F5B73D"><div class="sb" style="margin-bottom:8px"><span style="font-weight:700"><i class="ti ti-crown" style="color:#B47A0B"></i> asobi プレミアム</span><span class="badge" style="background:rgba(245,183,61,.15);color:#B47A0B">¥480 / 月</span></div><div class="mut" style="line-height:2"><i class="ti ti-check" style="color:#2FA97C"></i> 予定に<b style="color:#2B2620">参加し放題</b><br><i class="ti ti-check" style="color:#2FA97C"></i> 自分の予定を<b style="color:#2B2620">優先表示</b><br><i class="ti ti-check" style="color:#2FA97C"></i> <b style="color:#2B2620">プライベートモード</b>（同じ大学の人に表示されない）</div></div>'
+ +'<div class="card"><div class="sb"><span style="font-weight:700;font-size:13.5px">参加チケット（単発）</span><span class="badge" style="background:#F1EAD8;color:#2B2620">¥200 / 回</span></div><div class="mut" style="margin-top:4px;font-size:11.5px">無料枠を使い切った月に1回だけ参加したい人向け</div></div>'
+ +'<div class="mut" style="margin:4px 2px 10px;font-size:11px">※料金体系は検討中のため変更される場合があります</div>'
+ +B('gold','go(\'premium_done\')','プレミアムに登録する');}
+function premium_done(){S.premium=true;return '<div style="text-align:center;padding-top:66px" class="pop"><div style="font-size:46px">👑</div><div class="tt" style="margin-top:12px">プレミアムになりました</div><div class="mut" style="margin-top:10px">参加し放題・優先表示・プライベートモードが利用できます</div><div style="margin-top:30px">'+B('gold','goTab(\'mypage\')','マイページへ')+'</div></div>';}
+
+// ===== シート =====
+function SHEETS(){
+ if(S.sheet==='radius'){
+  return sheetWrap('表示設定','<div class="mut" style="font-size:11px;margin-bottom:4px">現在地からの範囲</div>'
+  +RADII.map(function(r){return '<div class="sheetrow sb" onclick="S.radius='+r[0]+';closeSheet()"><span>'+r[1]+'</span>'+(S.radius===r[0]?'<i class="ti ti-check" style="color:#FF7A45"></i>':'')+'</div>';}).join('')
+  +'<div class="sheetrow sb" onclick="S.sameOnly=!S.sameOnly;render()"><div><div>同性だけの予定のみ表示</div><div class="mut" style="font-size:11px">メンバー全員が同性の予定に絞ります</div></div>'+(S.sameOnly?'<i class="ti ti-check" style="color:#FF7A45"></i>':'')+'</div>');}
+ if(S.sheet==='want'){var sts=['渋谷駅','新宿駅','池袋駅','秋葉原駅','下北沢駅','高田馬場駅'];
+  return sheetWrap('この日・この場所で遊びたい','<div class="mut" style="margin-bottom:10px">'+dayLabel(S.day)+'に遊びたい場所を選んでください</div>'
+  +sts.map(function(s){return '<span class="pill" onclick="S.wSt=\''+s+'\';wantGo()">'+s.replace('駅','')+'</span>';}).join('')
+  +'<input class="inp" list="stlist" placeholder="駅名で検索" style="margin-top:8px" onkeydown="if(event.key===\'Enter\'){S.wSt=clean(this.value.trim());wantGo()}">'
+  +'<div class="sheetrow" style="color:#A79B84;border-bottom:none;margin-top:6px" onclick="closeSheet()">キャンセル</div>');}
+ if(S.sheet==='joinopt'){
+  return sheetWrap('参加のしかた','<div class="sheetrow" onclick="tryJoin()">1人で参加する</div>'
+  +'<div class="sheetrow" onclick="joinWithFriend()">友達と2人で参加する<div class="mut" style="font-size:11px;margin-top:2px">友達には招待リンクが送られます（デモでは仮メンバーが入ります）。友達の参加分は友達自身のアカウントの枠から消費されます</div></div>'
+  +'<div class="sheetrow" style="color:#A79B84" onclick="closeSheet()">キャンセル</div>');}
+ if(S.sheet==='member'&&S.pv){var x=S.pv;var isMe=(x[7]==='me');var special=(x[3]==='運営'||x[3]==='招待中');
+  return sheetWrap('','<div style="text-align:center;padding:2px 0 12px">'+ava1(x,62)+'<div style="font-weight:700;font-size:17px;margin-top:8px">'+x[0]+'</div><div class="mut" style="margin-top:3px">'+x[3]+(special?'':' ・ '+(x[2]==='m'?'男性':'女性'))+'</div><div style="margin-top:8px">'+badgeFor(x)+'</div>'
+  +(x[5]&&x[5].length?'<div style="margin-top:10px">'+tagPills(x[5])+'</div>':'')
+  +(special?'':'<div class="mut" style="margin-top:8px;font-size:11.5px">これまでの参加 3回'+(x[6]!=null?' ・ 主催した予定の成立 '+x[6]+'回':'')+'</div>')+'</div>'
+  +(isMe||x[3]==='招待中'?'':'<div class="sheetrow sb"><span class="lk" onclick="rep(\''+x[0]+'\')">通報する</span><span class="lk" style="color:#E25B4C" onclick="block(\''+x[0]+'\');closeSheet()">ブロックする</span></div>')
+  +'<div class="sheetrow" style="color:#A79B84;text-align:center;border-bottom:none" onclick="closeSheet()">閉じる</div>');}
+ if(S.sheet==='members'){var p=S.mychat||cur;if(!p)return '';
+  var rows=p.p.filter(function(x){return x[7]!=='me'}).map(function(x){return '<div class="sheetrow sb"><span onclick="viewByUid(\''+x[7]+'\')" style="cursor:pointer">'+x[0]+' <span class="mut" style="font-size:11px">'+x[3]+'</span></span><span>'+(x[3]==='招待中'?'':'<span class="lk" onclick="rep(\''+x[0]+'\')">通報</span> &nbsp; <span class="lk" style="color:#E25B4C" onclick="block(\''+x[0]+'\');closeSheet()">ブロック</span>')+'</span></div>';}).join('');
+  return sheetWrap('メンバー・通報・ブロック',rows+(isJoined(p)&&mc(p)>=3?'<div class="sheetrow" style="color:#E25B4C" onclick="sheet(\'leaveg\')">グループから退出</div>':'')+'<div class="sheetrow" style="color:#A79B84" onclick="closeSheet()">閉じる</div>');}
+ if(S.sheet==='shop'){var sp=S.mychat;if(!sp)return '';var ar=sp.area.replace('駅','').replace('エリア','');
+  return sheetWrap('近くのお店（PR）','<div class="sb" style="padding:10px 0;border-bottom:1px solid #F3ECDA"><span style="font-size:13.5px">三田製麺所 '+ar+'</span>'+B('g','toast(\'予約ページへ（送客デモ）\')','予約','width:auto;padding:7px 12px;font-size:12px')+'</div>'
+  +'<div class="sb" style="padding:10px 0"><span style="font-size:13.5px">個室居酒屋 '+ar+'店</span>'+B('g','toast(\'予約ページへ（送客デモ）\')','予約','width:auto;padding:7px 12px;font-size:12px')+'</div>'
+  +'<div class="mut" style="font-size:11px;padding-top:8px">提携リンクから予約すると、運営に紹介料が入ります</div>');}
+ if(S.sheet==='leaveg'){
+  return sheetWrap('グループから退出しますか？','<div class="mut" style="padding:2px 2px 12px">退出すると、この予定は「あと1人」の募集に戻ります。消費した参加分は戻りません。</div>'
+  +B('rd','leaveGroup()','退出する')+B('g','closeSheet()','戻る','margin-top:10px'));}
+ if(S.sheet==='cancelc'){
+  return sheetWrap('募集を取り消しますか？','<div class="mut" style="padding:2px 2px 12px">参加中のメンバーには取り消しが通知されます。この操作は元に戻せません。</div>'
+  +B('rd','cancelHost('+S.cancelId+')','取り消す')+B('g','closeSheet()','戻る','margin-top:10px'));}
+ if(S.sheet==='pubconfirm'&&S.cCat){var C=CATS[S.cCat];
+  return sheetWrap('この内容で公開しますか？','<div class="mut" style="line-height:2;padding:2px 2px 10px">'
+  +C.e+' '+C.n+' ・ '+(S.cTitle||C.n+'行ける人募集')+'<br>'
+  +dayLabel(S.cDay)+' '+S.cTime+'〜（'+S.cDur+'）<br>'
+  +S.cArea+(S.cMemo?' / '+S.cMemo:'')+' ・ '+S.cCap+'人'+(S.cSameG?' ・ 同性のみ':'')+'</div>'
+  +B('','publishGo()','公開する')+B('g','closeSheet()','修正する','margin-top:10px'));}
+ if(S.sheet==='rematch'){var p=S.mychat;if(!p)return '';
+  var days=dtiles(S.rmDay,'S.rmDay',DAYS7.slice(1,5));
+  var times=['19:00','20:00','21:00'].map(function(t){return '<span class="pill '+(S.rmTime===t?'on':'')+'" onclick="S.rmTime=\''+t+'\';render()">'+t+'</span>';}).join('');
+  return sheetWrap('このメンバーでまた遊ぶ','<div class="mut" style="padding:2px 2px 10px">メンバーはそのまま、次の予定を決めます</div>'
+  +'<div class="mut" style="margin-bottom:4px;font-size:11px">日付</div><div>'+days+'</div>'
+  +'<div class="mut" style="margin:6px 0 4px;font-size:11px">時間</div><div style="margin-bottom:10px">'+times+'</div>'
+  +B('','rematchGo()','この日程で決める')+B('g','closeSheet()','やめる','margin-top:10px'));}
+ if(S.sheet==='logout'){
+  return sheetWrap('ログアウトしますか？',B('rd','doLogout()','ログアウト')+B('g','closeSheet()','戻る','margin-top:10px'));}
+ if(S.sheet==='quit'){
+  return sheetWrap('退会しますか？','<div class="mut" style="padding:2px 2px 12px">アカウントとプロフィールは削除されます。安全対応のため、通報に関する記録は法令の範囲で一定期間保全されます。</div>'
+  +B('rd','doLogout()','退会する')+B('g','closeSheet()','戻る','margin-top:10px'));}
+ return '';}
+function sheetWrap(t,b){return '<div class="bd0" onclick="closeSheet()"></div><div class="sheet">'+(t?'<div style="font-weight:700;margin-bottom:8px">'+t+'</div>':'')+b+'</div>';}
+// ログアウト/退会 = セッション状態を完全破棄（メモリ内デモなのでリロードで実現）
+function doLogout(){location.replace(location.pathname+location.search);}
+function rematchGo(){var p=S.mychat;if(!p)return;
+ p.day=S.rmDay;p.time=S.rmTime;p.meet=false;p.rated=false;p.rmap=null;
+ p.msgs.push(['sys','次の予定: '+dayLabel(p.day)+' '+p.time+' '+p.area+'（メンバーはそのまま）']);
+ S.sheet=null;toast('次の予定が決まりました');openChat();}
+
+// ===== ナビ・描画 =====
+var TABS=['home','chats','mypage'];
+function tabbar(){var ic={home:['ti-search','さがす'],chats:['ti-message-circle','やりとり'],mypage:['ti-user','マイページ']};
+ return '<div class="tabbar">'+tabItem('home',ic.home)+tabItem('chats',ic.chats)+tabItem('mypage',ic.mypage)+'</div>';}
+function tabItem(t,x){var dot=(t=='chats')&&plans.some(function(p){return isJoined(p)&&mc(p)>=3&&!p.ended});
+ return '<div class="tab '+(S.tab===t&&isTab()?'on':'')+'" onclick="goTab(\''+t+'\')">'+(dot?'<span class="nd"></span>':'')+'<i class="ti '+x[0]+'"></i>'+x[1]+'</div>';}
+function isTab(){return TABS.indexOf(S.screen)>=0;}
+var screens={welcome:welcome,ag_email:ag_email,ag_code:ag_code,ag_profile:ag_profile,ag_tags:ag_tags,ag_perms:ag_perms,terms:terms,privacy:privacy,promo:promo,
+ home:home,detail:detail,joined:joined,matched:matched,agedeny:agedeny,samedeny:samedeny,quota:quota,chat:chat,share:share,sos:sos,
+ rate:rate,ratebad:ratebad,thanks:thanks,preport:preport,reportdone:reportdone,
+ create:create,created:created,chats:chats,host_manage:host_manage,
+ mypage:mypage,profile_edit:profile_edit,set_account:set_account,set_badge:set_badge,set_notif:set_notif,set_privacy:set_privacy,set_safety:set_safety,help:help,history:history,notifs:notifs,guidelines:guidelines,premium:premium,premium_done:premium_done};
+function render(){var html='<div class="bar"><span>'+NOW+'</span><span style="font-family:\'M PLUS Rounded 1c\',sans-serif;font-weight:800;letter-spacing:.5px">asobi<span style="color:#FF7A45">.</span></span><span><i class="ti ti-wifi"></i> <i class="ti ti-battery-3"></i></span></div>';
+ html+='<div class="scr" '+(isTab()?'style="padding-bottom:4px"':'')+'>'+(screens[S.screen]||welcome)()+'</div>';
+ if(isTab())html+=tabbar();
+ if(S.screen==='home'&&!S.sheet)html+='<div role="button" tabindex="0" onkeydown="if(event.key===\'Enter\'){this.click()}" onclick="openCreate()" style="position:absolute;left:16px;bottom:78px;display:flex;align-items:center;gap:6px;background:#FF7A45;color:#fff;font-weight:700;font-size:13.5px;padding:13px 18px;border-radius:999px;cursor:pointer;box-shadow:0 8px 20px rgba(255,122,69,.35);z-index:4"><i class="ti ti-plus" style="font-size:17px"></i>予定を立てる</div>';
+ if(S.sheet)html+=SHEETS();
+ if(S.toast)html+='<div class="toast">'+S.toast+'</div>';
+ document.getElementById('ph').innerHTML=html;}
+function go(s){S.sheet=null;S.screen=s;render();}
+function goTab(t){S.sheet=null;S.tab=t;S.screen=t;render();}
+function sheet(s){S.sheet=s;render();}
+function closeSheet(){S.sheet=null;render();}
+function openP(id){cur=plans.filter(function(p){return p.id==id})[0];if(cur)go('detail');}
+function fill(key,btn){S[key]=['4','8','2','9','1','6'];render();var b=document.getElementById(btn);if(b){b.style.opacity='1';b.style.pointerEvents='auto';}}
+function upd(){var b=document.getElementById('rsend');if(!b)return;var ok=S.rcat&&S.rtxt&&S.rtxt.trim().length>0;b.style.opacity=ok?'1':'.4';b.style.pointerEvents=ok?'auto':'none';}
+function updOther(){var b=document.getElementById('ratebadbtn');if(!b)return;var ok=S.rtags.length&&(S.rOther&&S.rOther.trim().length>0);b.style.opacity=ok?'1':'.45';b.style.pointerEvents=ok?'auto':'none';}
+function tgTag(t){var i=S.rtags.indexOf(t);if(i<0)S.rtags.push(t);else S.rtags.splice(i,1);render();}
+function toast(m){S.toast=m;render();setTimeout(function(){S.toast=null;render();},1700);}
+// 写真CDNが読めない環境向けフォールバック
+window.addEventListener('error',function(e){var t=e.target;
+ if(t&&t.tagName==='IMG'&&(' '+t.className+' ').indexOf(' ava ')>=0){
+  var s=document.createElement('span');s.className='ava';
+  s.setAttribute('style',t.getAttribute('style')||'');s.style.background='#B0A38B';s.textContent='?';
+  if(t.parentNode)t.parentNode.replaceChild(s,t);}},true);
+// デモ用: #home 等のハッシュで認証をスキップして任意画面へ
+if(location.hash){var h=location.hash.substring(1);
+ if(!S.photo)S.photo=PT+(S.gender==='f'?'women':'men')+'/75.jpg';
+ if(!S.tags.length)S.tags=['nomi','karaoke'];
+ if(!S.seeded){plans.push({id:99,cat:'cafe',title:'新作スイーツ開拓',area:'新宿駅',dist:2.5,day:'7/3',time:'20:00',dur:'約1時間',cap:3,likes:2,p:[[S.name,S.myc,S.gender,myLabel(),S.photo,S.tags.slice(),null,'me','host']],host:'me'});S.seeded=true;}
+ if(TABS.indexOf(h)>=0){S.tab=h;S.screen=h;}else if(screens[h]){S.screen=h;}}
+render();
+</script>
+</body>
+</html>
