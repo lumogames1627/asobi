@@ -1,0 +1,11 @@
+{
+  "name": "asobi. - 大学生限定 遊び友達マッチング",
+  "short_name": "asobi.",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#FAF6ED",
+  "theme_color": "#FAF6ED",
+  "icons": [
+    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
+  ]
+}

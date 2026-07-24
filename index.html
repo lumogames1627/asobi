@@ -5,6 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#FAF6ED">
 <title>asobi. v10 プロトタイプ</title>
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon.svg">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3/dist/tabler-icons.min.css">
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;500;700&family=M+PLUS+Rounded+1c:wght@700;800&display=swap');
@@ -94,17 +97,17 @@ img.ava{object-fit:cover;}
 // デモ基準: 2026-07-02(木) 18:20
 var NOW='18:20';
 var CATS={
- nomi:{n:'飲み',e:'🍻',c:'#E2574C',age:20},
  gohan:{n:'ごはん',e:'🍜',c:'#F59E0B'},
  cafe:{n:'カフェ',e:'☕',c:'#2FA97C'},
+ nomi:{n:'飲み',e:'🍻',c:'#E2574C',age:20},
  karaoke:{n:'カラオケ',e:'🎤',c:'#F0608C'},
- game:{n:'ゲーム',e:'🎮',c:'#7C6CF6'},
- board:{n:'ボドゲ',e:'🎲',c:'#9B7BD8'},
  movie:{n:'映画',e:'🎬',c:'#5C7CFA'},
- sports:{n:'スポーツ',e:'🏀',c:'#2FA3DC'},
  sauna:{n:'サウナ・銭湯',e:'♨️',c:'#C86B3C'},
- drive:{n:'ドライブ',e:'🚗',c:'#4AA89E'},
+ game:{n:'ゲーム',e:'🎮',c:'#7C6CF6'},
+ sports:{n:'スポーツ',e:'🏀',c:'#2FA3DC'},
+ board:{n:'ボドゲ',e:'🎲',c:'#9B7BD8'},
  shop:{n:'買い物',e:'🛍️',c:'#D96BA8'},
+ drive:{n:'ドライブ',e:'🚗',c:'#4AA89E'},
  mahjong:{n:'麻雀',e:'🀄',c:'#4CA85E'},
  study:{n:'作業・勉強',e:'📚',c:'#8A97A8'},
  other:{n:'その他',e:'✨',c:'#B0A38B'}
@@ -113,7 +116,7 @@ var DAYS7=[{k:'7/2',l:'きょう',w:'今日',n:2},{k:'7/3',l:'あす',w:'明日'
 function dayLabel(k){var d=DAYS7.filter(function(x){return x.k===k})[0];return d?d.l:k;}
 // カレンダー型の日付タイル（曜日+日にちの2段で統一）
 function dtiles(cur,assign,list){return (list||DAYS7).map(function(d){return '<span class="dtile'+(cur===d.k?' on':'')+'" onclick="'+assign+'=\''+d.k+'\';render()"><span class="dw'+(d.w==='土'?' sat':(d.w==='日'?' sun':''))+'">'+d.w+'</span><span class="dn">'+d.n+'</span></span>';}).join('');}
-var RADII=[[10,'近く（10km）'],[30,'広め（30km）'],[50,'最大（50km）']];
+var RADII=[[10,'近め'],[30,'ふつう'],[50,'広め']];
 // 「好きなカテゴリ」はCATSと同一の語彙を使う（旧「好きな遊び」タグはカテゴリと7/12語が完全重複していたため統合）
 var PT='https://randomuser.me/api/portraits/';
 // メンバー: [0名前,1色,2性別,3'大学 年齢',4写真,5タグ,6主催成立回数,7uid,8消費元(自分のみ)]
@@ -190,7 +193,7 @@ function offBadge(p){return p.official?' <span class="badge" style="background:r
 // ===== オンボーディング =====
 function welcome(){return '<div style="text-align:center;padding-top:36px"><div class="logo"><b>asobi</b>.</div>'
  +'<div style="font-size:24px;font-weight:700;margin-top:16px;letter-spacing:.5px">ヒマを、遊びに変える。</div>'
- +'<div class="mut" style="margin:8px 0 26px">遊びの予定に参加するだけ。3人そろったら出発。</div>'
+ +'<div class="mut" style="margin:8px 0 26px">遊びの予定に参加するだけ。3人そろったらグループチャット開始。</div>'
  +'<div style="text-align:left;padding:0 6px">'
  +'<div class="vrow"><i class="ti ti-school"></i><div><div style="font-weight:700;font-size:13.5px">大学生限定</div><div class="mut" style="font-size:11.5px;margin-top:2px">大学メール認証。学生だけの遊び場</div></div></div>'
  +'<div class="vrow"><i class="ti ti-calendar-bolt"></i><div><div style="font-weight:700;font-size:13.5px">人ではなく、予定に参加</div><div class="mut" style="font-size:11.5px;margin-top:2px">飲み・カラオケ・ごはん。気になる予定に乗るだけ</div></div></div>'
@@ -217,7 +220,7 @@ function addPhoto(){S.photoN++;var u=PT+(S.gender==='f'?'women':'men')+'/'+S.pho
 function ag_profile(){
  var mx=dim(S.birth.y,S.birth.m);if(S.birth.d>mx)S.birth.d=mx;
  var age=calcAge();var adult=age>=18;
- var ys='';for(var y=2008;y>=1980;y--)ys+='<option value="'+y+'"'+(S.birth.y==y?' selected':'')+'>'+y+'年</option>';
+ var _cy=new Date().getFullYear();var ys='';for(var y=_cy-18;y>=_cy-27;y--)ys+='<option value="'+y+'"'+(S.birth.y==y?' selected':'')+'>'+y+'年</option>';
  var ms='';for(var m=1;m<=12;m++)ms+='<option value="'+m+'"'+(S.birth.m==m?' selected':'')+'>'+m+'月</option>';
  var ds='';for(var d=1;d<=mx;d++)ds+='<option value="'+d+'"'+(S.birth.d==d?' selected':'')+'>'+d+'日</option>';
  return '<div class="r" style="margin-bottom:14px"><span class="back" onclick="go(\'ag_code\')">‹</span><span class="mut" style="margin-left:auto">2 / 4</span></div>'
@@ -242,12 +245,12 @@ function profNext(){S.name=clean(S.name).trim();
 function tgMyTag(t){var arr=S.d?S.d.tags:S.tags;var i=arr.indexOf(t);if(i>=0)arr.splice(i,1);else if(arr.length<5)arr.push(t);render();}
 function ag_tags(){
  return '<div class="r" style="margin-bottom:14px"><span class="back" onclick="go(\'ag_profile\')">‹</span><span class="mut" style="margin-left:auto">3 / 4</span></div>'
- +'<div class="tt">好きなカテゴリ</div><div class="mut" style="margin:8px 0 16px">1〜5個選んでください。同じ趣味の予定が見つけやすくなります</div>'
+ +'<div class="tt">好きなカテゴリ</div><div class="mut" style="margin:8px 0 16px">1〜5個選んでください</div>'
  +'<div style="margin-bottom:14px">'+Object.keys(CATS).filter(function(k){return k!=='other'}).map(function(k){var c=CATS[k];return '<span class="pill '+(S.tags.indexOf(k)>=0?'on':'')+'" onclick="tgMyTag(\''+k+'\')">'+c.e+' '+c.n+'</span>';}).join('')+'</div>'
  +'<div class="mut" style="margin-bottom:14px;font-size:11px">選択中: '+(S.tags.length?S.tags.map(function(k){return CATS[k]?CATS[k].n:k}).join('・'):'なし')+'（最大5つ）</div>'
  +B('','if(S.tags.length){go(\'ag_perms\')}else{toast(\'1つ以上選んでください\')}','次へ');}
 function ag_perms(){return '<div class="r" style="margin-bottom:14px"><span class="back" onclick="go(\'ag_tags\')">‹</span><span class="mut" style="margin-left:auto">4 / 4</span></div>'
- +'<div class="tt">通知と位置情報</div><div class="mut" style="margin:8px 0 18px">快適に使うための設定です。あとから変更できます</div>'
+ +'<div class="tt">通知と位置情報</div><div class="mut" style="margin:8px 0 18px">近くの予定の表示と、成立・チャットの通知に使います</div>'
  +'<div class="card"><div class="r"><div class="em" style="background:rgba(255,122,69,.15)">🔔</div><div><div style="font-weight:700;font-size:14px">プッシュ通知</div><div class="mut" style="font-size:11.5px;margin-top:2px">成立・チャット・集合リマインドを受け取ります</div></div></div></div>'
  +'<div class="card"><div class="r"><div class="em" style="background:rgba(47,163,220,.15)">📍</div><div><div style="font-weight:700;font-size:14px">位置情報</div><div class="mut" style="font-size:11.5px;margin-top:2px">近くの予定を表示するために使用します</div></div></div></div>'
  +'<div style="margin-top:20px">'+B('','finishAuth()','許可して始める')+'</div>'
@@ -339,7 +342,7 @@ function detail(){var p=cur;var C=CATS[p.cat];var age=calcAge();
  +(function(){var others=p.p.filter(function(x){return x[7]!=='me'&&x[5]&&x[5].length;});
   var common=S.tags.filter(function(t){return others.some(function(x){return x[5].indexOf(t)>=0;});});
   return common.length?'<div class="sb" style="margin-top:10px"><span class="mut">共通の趣味</span><span style="font-weight:500;color:#FF7A45">'+common.map(function(k){return CATS[k]?CATS[k].n:k;}).join('・')+'</span></div>':'';})()+'</div>'
- +'<div class="h3">メンバー</div><div class="card">'+(p.p.length?p.p.map(function(x,i){return '<div class="r" style="padding:6px 0;cursor:pointer'+(i?';border-top:1px solid #F3ECDA':'')+'" onclick="viewMember('+p.id+','+i+')">'+ava1(x,34)+'<span style="font-weight:500">'+x[0]+'</span><span class="mut" style="font-size:11.5px">'+x[3]+'</span>'+(i==0&&!p.official?'<span class="badge" style="background:rgba(245,183,61,.15);color:#B47A0B">👑 ホスト</span>':'')+'<i class="ti ti-chevron-right" style="margin-left:auto;color:#C9BDA4"></i></div>';}).join(''):'<div class="mut" style="padding:4px 0">まだ参加者はいません。最初の1人になりましょう</div>')+'</div>'
+ +'<div class="h3">メンバー</div><div class="card">'+(p.p.length?p.p.map(function(x,i){return '<div class="r" style="padding:6px 0;cursor:pointer'+(i?';border-top:1px solid #F3ECDA':'')+'" onclick="viewMember('+p.id+','+i+')">'+ava1(x,34)+'<span style="font-weight:500">'+x[0]+'</span><span class="mut" style="font-size:11.5px">'+x[3]+'</span>'+(i==0&&!p.official?'<span class="badge" style="background:rgba(245,183,61,.15);color:#B47A0B">👑 ホスト</span>':'')+'<i class="ti ti-chevron-right" style="margin-left:auto;color:#C9BDA4"></i></div>';}).join(''):'<div class="mut" style="padding:4px 0">参加者ゼロ。一番乗りしてみる?</div>')+'</div>'
  +(p.minAge==20&&!joinedP?'<div class="warn"><i class="ti ti-id"></i> この予定は20歳以上限定です。あなたの登録年齢: '+age+'歳'+(age<20?'（参加できません）':'')+'</div>':'')
  +cta
  +quota
@@ -597,7 +600,7 @@ function host_manage(){var p=S.curHost;if(!p)return chats();
  return '<div class="r" style="margin-bottom:10px"><span class="back" onclick="goTab(\'chats\')">‹</span><span class="tt" style="margin-left:8px;font-size:18px">予定の管理</span></div>'
  +'<div class="r" style="margin-bottom:12px"><div class="em" style="width:48px;height:48px;font-size:23px;background:'+CATS[p.cat].c+'22">'+CATS[p.cat].e+'</div><div><div style="font-weight:700;font-size:16px">'+p.title+'</div><div class="mut">'+dayLabel(p.day)+' '+p.time+'〜（'+(p.dur||'未定')+'） ・ '+p.area+'</div></div></div>'
  +'<div class="card"><div class="sb"><span class="mut">状態</span><span style="font-weight:500">'+(realMc(p)>=3?'成立':'募集中')+' '+mc(p)+'/'+p.cap+'人</span></div></div>'
- +'<div class="card"><div class="r" style="gap:6px"><i class="ti ti-heart-filled" style="color:#FF7A45"></i><span style="font-size:13.5px;font-weight:500">'+(p.likes||0)+'人がこの予定をいいねしています</span></div>'+(p.likes>0&&mc(p)<p.cap?'<div class="mut" style="margin-top:4px;font-size:11px">気になっている人がいます。時間や場所の調整で参加しやすくなるかもしれません</div>':'')+'</div>'
+ +'<div class="card"><div class="r" style="gap:6px"><i class="ti ti-heart-filled" style="color:#FF7A45"></i><span style="font-size:13.5px;font-weight:500">'+(p.likes||0)+'人がこの予定をいいねしています</span></div>'+(p.likes>0&&mc(p)<p.cap?'<div class="mut" style="margin-top:4px;font-size:11px">気になっている人がいます。時間や場所を調整すると参加しやすくなります</div>':'')+'</div>'
  +'<div class="h3">メンバー</div><div class="card">'+p.p.map(function(x,i){return '<div class="r" style="padding:6px 0;cursor:pointer'+(i?';border-top:1px solid #F3ECDA':'')+'" onclick="viewMember('+p.id+','+i+')">'+ava1(x,34)+'<span style="font-weight:500">'+x[0]+'</span><span class="mut" style="font-size:11.5px">'+x[3]+'</span>'+(i==0?'<span class="badge" style="background:rgba(245,183,61,.15);color:#B47A0B">👑 あなた</span>':'')+'<i class="ti ti-chevron-right" style="margin-left:auto;color:#C9BDA4"></i></div>';}).join('')+'</div>'
  +(realMc(p)>=3?B('','openChatFor('+p.id+')','グループチャットへ'):'')
  +B('g','S.cancelId='+p.id+';sheet(\'cancelc\')','募集を取り消す','margin-top:8px;color:#E25B4C');}
